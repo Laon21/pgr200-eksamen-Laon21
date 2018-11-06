@@ -25,6 +25,8 @@ public class Server {
 
     public Server() throws IOException {
         serverSocket = new ServerSocket(0);
+        this.port = serverSocket.getLocalPort();
+        System.out.println("Server online on port: " + port);
         db = new Database(db.createDataSource());
         new Thread(() -> startServer()).start();
 
@@ -96,7 +98,9 @@ public class Server {
         }
     }
 
-
+    public int getPort(){
+        return this.port;
+    }
 
     private String readNextLine(InputStream input) throws IOException {
         StringBuilder currentLine = new StringBuilder();

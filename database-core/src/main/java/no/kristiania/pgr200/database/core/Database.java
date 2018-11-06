@@ -25,7 +25,7 @@ public class Database extends DaoMethods {
     }
 
     public String insertTalk(Talk talk) throws SQLException {
-        try(Connection conn = dataSource.getConnection()) {
+        try (Connection conn = dataSource.getConnection()) {
             String sql = "INSERT INTO talks ( title, description ,topic) values (?, ?, ?)";
             try (PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, talk.getTitle());
@@ -35,7 +35,7 @@ public class Database extends DaoMethods {
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         talk.setId(generatedKeys.getInt(1));
-                        return talk.getTitle() + "inserted with id = "+ talk.getId();
+                        return talk.getTitle() + "inserted with id = " + talk.getId();
                     }
                     return "No id";
                 }
@@ -43,7 +43,7 @@ public class Database extends DaoMethods {
         }
     }
 
-    private Talk mapToTalk(ResultSet result) throws SQLException{
+    private Talk mapToTalk(ResultSet result) throws SQLException {
         Talk talk = new Talk();
         talk.setId(result.getInt(1));
         talk.setTitle(result.getString("title"));
@@ -52,9 +52,9 @@ public class Database extends DaoMethods {
         return talk;
     }
 
-        public List<Talk> listAll() throws SQLException {
-            return list("SELECT * FROM conference_talk", result ->mapToTalk(result));
-        }
+    public List<Talk> listAll() throws SQLException {
+        return list("SELECT * FROM conference_talk", result -> mapToTalk(result));
+    }
 
     public Talk getTalk(int id) throws SQLException {
         return getSingleObject("select * FROM conference_talk where id = " + id, result -> mapToTalk(result));
@@ -64,10 +64,10 @@ public class Database extends DaoMethods {
     public DataSource createDataSource() {
         readPropertiesFile();
         SQLServerDataSource dataSource = new SQLServerDataSource();
-        dataSource.setUser(dbUserName);
-        dataSource.setPassword(dbPassword);
         dataSource.setServerName(dbUrl);
         dataSource.setDatabaseName(dbDatabase);
+        dataSource.setUser(dbUserName);
+        dataSource.setPassword(dbPassword);
         dataSource.setEncrypt(dbEncrypt);
         dataSource.setTrustServerCertificate(dbTrustServerCertificate);
         dataSource.setHostNameInCertificate(dbHostNameInCertificate);

@@ -1,65 +1,45 @@
 package no.kristiania.pgr200.database.main;
 
+import no.kristiania.pgr200.database.core.Server;
+
+import java.io.IOException;
+import java.net.Socket;
+
+
 public class Client {
 
+    static Server server;
 
-    public static void main(String[] args) {
-        Client client = new Client();
+    public static void main(String[] args) throws IOException {
+            server = new Server();
 
-        String command = args[0];
-        switch (command) {
-            case "add": {
-            for(int i = 0; i > args.length; i++){
-
-
-            }
-            }
-            case "list": {
-
-            }
-            case "get": {
-
-            }
-
+    }
+    //requestLine should look like this
+    // "add" param "-ti% $title -de% $description -to% $topic"
+    // "list all"
+    // "show" Param "id"
+    // "update" NYI
+    public void sendRequest(String method,String target, String request){
+        if(method.equalsIgnoreCase("list all"))
+        try {
+            Socket socket = new Socket("localhost",server.getPort());
+            socket.getOutputStream().write(("GET " + target +" "+ request + "\r\n").getBytes());
+            socket.getOutputStream().write(("\r\n").getBytes());
+        } catch (IOException e) {
+            System.out.println("failed to send GET request");
         }
-    }
 
-
-
-
-    /*
-    Adds a talk to the core with the option to add the time and place of the talk
-    Talk: Title, Description, Topic
-    Day: dd-MM-YYYY
-    Room: varchar(10)
-    Timeslot: start and finish time
-     */
-    public void addTalk() {
+        if(method.equalsIgnoreCase("post")){
+            try {
+            Socket socket = new Socket("localhost",server.getPort());
+            socket.getOutputStream().write(("POST http://localhost/ap HTTP/1.1\r\n").getBytes());
+            socket.getOutputStream().write((request).getBytes());
+            socket.getOutputStream().write(("\r\n").getBytes());
+        } catch (IOException e) {
+            System.out.println("failed to send POST request");
+        }
+        }
 
     }
-
-
-    /*
-    Lists all talks registered based on topic
-     */
-    public void listTalks() {
-
-    }
-
-    /*
-    Gets the details of a specific talk based on id
-     */
-    public void getTalk() {
-
-    }
-
-    /*
-    Updates the values of a talk in the core
-
-     */
-    public void updateTalk() {
-
-    }
-
 
 }
