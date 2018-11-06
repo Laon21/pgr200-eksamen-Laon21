@@ -19,6 +19,8 @@ public class Server {
     private int port;
     private InputStream input;
     private OutputStream output;
+    private String dbConnUrl, dbPassword, dbUserName;
+
 
     private Database db;
 
@@ -27,7 +29,7 @@ public class Server {
         serverSocket = new ServerSocket(0);
         this.port = serverSocket.getLocalPort();
         System.out.println("Server online on port: " + port);
-        db = new Database(db.createDataSource());
+        db = new Database(createDataSource());
         new Thread(() -> startServer()).start();
 
     }
@@ -119,6 +121,32 @@ public class Server {
             currentLine.append((char) line);
         }
         return currentLine.toString();
+    }
+
+    public DataSource createDataSource() {
+        PGPoolingDataSource dataSource = new PGPoolingDataSource();
+        readPropertiesFile();
+        dataSource.setUrl(dbConnUrl);
+        dataSource.setUser(dbUserName);
+        dataSource.setPassword(dbPassword);
+        Flyway.configure().dataSource(dataSource).load().migrate();
+        return dataSource;
+    }
+
+    private void readPropertiesFile() {
+        Properties props = new Properties();
+        String dbSettingsPropertyFile = "eksamen.properties";
+        try {
+            props.load(getClass().getClassLoader().getResourceAsStream(dbSettingsPropertyFile));
+        } catch (IOException e) {
+            System.out.println("File not found");
+        }
+
+        // Get each property value
+        dbConnUrl = props.getProperty("db.conn.url");
+        dbUserName = props.getProperty("db.username");
+        dbPassword = props.getProperty("db.password");
+
     }
 
 }

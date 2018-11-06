@@ -13,15 +13,11 @@ import java.util.List;
 import java.util.Properties;
 
 public class Database extends DaoMethods {
-    private String dbUrl, dbPassword, dbUserName, dbDatabase, dbHostNameInCertificate;
-    private InputStream input;
-    private OutputStream output;
-    private boolean dbEncrypt, dbTrustServerCertificate;
-    private int dbLoginTimeout;
 
 
-    public Database(DataSource datasource) {
-        super(datasource);
+
+    public Database(DataSource dataSource) {
+        super(dataSource);
     }
 
     public String insertTalk(Talk talk) throws SQLException {
@@ -53,49 +49,13 @@ public class Database extends DaoMethods {
     }
 
     public List<Talk> listAll() throws SQLException {
-        return list("SELECT * FROM conference_talk", result -> mapToTalk(result));
+        return list("SELECT * FROM TALKS", result -> mapToTalk(result));
     }
 
     public Talk getTalk(int id) throws SQLException {
-        return getSingleObject("select * FROM conference_talk where id = " + id, result -> mapToTalk(result));
+        return getSingleObject("select * FROM TALKS where talk_id = " + id, result -> mapToTalk(result));
     }
 
 
-    public DataSource createDataSource() {
-        readPropertiesFile();
-        SQLServerDataSource dataSource = new SQLServerDataSource();
-        dataSource.setServerName(dbUrl);
-        dataSource.setDatabaseName(dbDatabase);
-        dataSource.setUser(dbUserName);
-        dataSource.setPassword(dbPassword);
-        dataSource.setEncrypt(dbEncrypt);
-        dataSource.setTrustServerCertificate(dbTrustServerCertificate);
-        dataSource.setHostNameInCertificate(dbHostNameInCertificate);
-        dataSource.setLoginTimeout(dbLoginTimeout);
 
-        Flyway.configure().dataSource(dataSource).load().migrate();
-        return dataSource;
-    }
-
-    private void readPropertiesFile() {
-        Properties props = new Properties();
-        String dbSettingsPropertyFile = "JDBCSettings.properties";
-        try {
-            props.load(getClass().getClassLoader().getResourceAsStream(dbSettingsPropertyFile));
-        } catch (IOException e) {
-            System.out.println("File not found");
-        }
-
-        // Get each property value
-        dbUrl = props.getProperty("dbUrl");
-        dbDatabase = props.getProperty("dbDatabase");
-        dbUserName = props.getProperty("dbUser");
-        dbPassword = props.getProperty("dbPass");
-        dbEncrypt = Boolean.parseBoolean(props.getProperty("dbEncrypt"));
-        dbTrustServerCertificate = Boolean.parseBoolean(props.getProperty("dbTrustServerCertificate"));
-        dbHostNameInCertificate = props.getProperty("dbHostNameInCertificate");
-        dbLoginTimeout = Integer.parseInt(props.getProperty("dbLoginTimeout"));
-
-
-    }
 }
