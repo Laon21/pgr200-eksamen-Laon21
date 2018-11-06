@@ -1,3 +1,7 @@
+# Dokumentasjon
+PGR200 Eksamen
+Espen Høines (laon21) & William Nordli (norwil17)
+
 # PGR200 Hovedinnlevering
 
 Innleveringsfrist: 12. november kl 09:00. **Viktig:** WiseFlow *stenger* når fristen er ute - lever i tide.
@@ -110,7 +114,7 @@ I tilbakemeldingen er det lurt å stille spørsmålene: 1. Hva lærte jeg av den
 
 ### Forberedelse
 
-- [ ] Finn endelig grupperpartner innen 1. november
+- [x] Finn endelig grupperpartner innen 1. november
 - [ ] Finn en gruppe for gjensidig evaluering innen 1. november
 
 ### Innlevering
