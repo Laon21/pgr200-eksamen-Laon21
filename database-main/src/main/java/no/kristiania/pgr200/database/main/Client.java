@@ -1,18 +1,27 @@
 package no.kristiania.pgr200.database.main;
 
+import no.kristiania.pgr200.database.core.ArgumentsParser;
 import no.kristiania.pgr200.database.core.Server;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 
 
 public class Client {
-
+	
+	private static HashMap<String, String> arguments;
     static Server server;
-    final String target = "localhost/api";
+    private String target = "localhost/api";
 
-    public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException {
         server = new Server();
+        ArgumentsParser parser = new ArgumentsParser();
+        arguments = parser.parseArgs(args);
+        for(String key : arguments.keySet()) {
+        	System.out.println(key + ": " + arguments.get(key));
+        }
+        //HttpRequest req = new HttpRequest();
 
         if(args.length == 0){
             System.out.println("Try with an argument");
