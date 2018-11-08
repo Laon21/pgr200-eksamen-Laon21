@@ -78,7 +78,7 @@ public class Server {
                 else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("list")) {
                     try {
                         for (Talk talk : db.listAll()) {
-                            output.write((talk).toString().getBytes());
+                            output.write(((talk).toString() + "\r\n").getBytes());
                         }
                         if(db.listAll().isEmpty()){
                             output.write(("There was nothing to print!?").getBytes());
@@ -92,7 +92,8 @@ public class Server {
 
                 else if (isInteger(requestLine[1].split("/")[3])) {
                     try {
-                        output.write((db.getTalk(Integer.parseInt(requestLine[1].split("/")[3])).toString()).getBytes());
+                        output.write(db.getTalk(Integer.parseInt(requestLine[1].split("/")[3])).toString().getBytes());
+                        output.write(("\r\n").getBytes());
                     } catch (SQLException e) {
                         System.out.println("Something went wrong");
                         break;

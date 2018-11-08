@@ -16,13 +16,17 @@ public class Client {
 
 
     public static void main(String[] args){
+        try{
         if (args.length == 0) {
             noArguments();
         }
         requestStringBuilder(args);
         String method = httpString.toString().split(" ")[0];
         String requestString = httpString.toString().split(" ")[1].replace(" ", "+");
-        sendRequest(target,10080,method, requestString).printResponse();
+        sendRequest(target,10080,method, requestString).printResponse();}
+        catch (NullPointerException e){
+            System.out.println("Check if server is online before trying again");
+        }
     }
 
     private static void noArguments() {
