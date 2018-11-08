@@ -7,25 +7,30 @@ import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DatabaseTest {
 
+
     @Test
     public void insertAndShowTalk() throws SQLException {
-        DataSource dataSource  = createDataSource();
+        DataSource dataSource = createDataSource();
         Database db = new Database(dataSource);
         Talk testTalk = sampleTalk();
 
-            db.insertTalk(testTalk);
+        db.insertTalk(testTalk);
         System.out.println(testTalk);
-            assertThat(db.getTalk(testTalk.getId())).isEqualToComparingFieldByField(testTalk);
+        assertThat(db.getTalk(testTalk.getId())).isEqualToComparingFieldByField(testTalk);
 
 
-    }@Test
-    public void listTalks(){
-        DataSource dataSource  = createDataSource();
+    }
+
+    @Test
+    public void listTalks() {
+        DataSource dataSource = createDataSource();
         Database db = new Database(dataSource);
         Talk testTalk = sampleTalk();
         try {
@@ -35,10 +40,26 @@ public class DatabaseTest {
         } catch (SQLException e) {
             System.out.println("Failed to insert talk");
         }
-
     }
 
-    private Talk sampleTalk(){
+    @Test public void updateTalk(){
+        DataSource dataSource = createDataSource();
+        Database db = new Database(dataSource);
+        Talk testTalk = sampleTalk();
+        List<String> fakeArgs = new ArrayList<String>();
+        fakeArgs.add("-title");
+        fakeArgs.add("5");
+            try {
+                db.insertTalk(testTalk);
+                db.updateTalk(testTalk.getId(),fakeArgs);
+                assertThat(db.getTalk(testTalk.getId()).getTitle()).isEqualToIgnoringCase("5");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    private Talk sampleTalk() {
         Talk talk = new Talk();
         talk.setTitle("1");
         talk.setDescription("2");

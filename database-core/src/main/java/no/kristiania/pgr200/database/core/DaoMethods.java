@@ -33,6 +33,16 @@ public abstract class DaoMethods {
         }
     }
 
+    public <T> void updateSingleObject(String sql, ResultSetMapper<T> mapper) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.executeUpdate();
+
+            }
+        }
+    }
+
+
     protected <T> List<T> list(String sql, ResultSetMapper<T> mapper) throws SQLException {
         try(Connection connection = dataSource.getConnection()) {
             try(PreparedStatement statement = connection.prepareStatement(sql)){

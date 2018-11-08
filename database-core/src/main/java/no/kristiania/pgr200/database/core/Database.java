@@ -1,26 +1,18 @@
 package no.kristiania.pgr200.database.core;
 
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
-import org.flywaydb.core.Flyway;
-import org.postgresql.ds.PGPoolingDataSource;
-
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class Database extends DaoMethods {
-
 
 
     public Database(DataSource dataSource) {
         super(dataSource);
     }
 
-    public String insertTalk(Talk talk) throws SQLException {
+    public String insertTalk(Talk talk)  {
         try (Connection conn = dataSource.getConnection()) {
             String sql = "INSERT INTO talks ( title, description ,topic) values (?, ?, ?)";
             try (PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -31,11 +23,15 @@ public class Database extends DaoMethods {
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         talk.setId(generatedKeys.getInt(1));
-                        return talk.getTitle() + "inserted with id = " + talk.getId();
+                        return talk.getTitle() + "inserted with talk_id = " + talk.getId();
                     }
                     return "No id";
                 }
+            } catch (SQLException e) {
+                return "sql error when trying to insert talk";
             }
+        } catch (SQLException e) {
+            return "sql error when trying to insert talk";
         }
     }
 
@@ -56,6 +52,45 @@ public class Database extends DaoMethods {
         return getSingleObject("select * FROM TALKS where talk_id = " + id, result -> mapToTalk(result));
     }
 
+    public void updateTalk(int id, List<String> args) throws SQLException {
+        String sql = checkUpdateArgs(id, args);
+        updateSingleObject(sql, result -> mapToTalk(result));
+        System.out.println("Updated values of talk " + id);
+    }
+
+    private String checkUpdateArgs(int id, List<String> args) {
+        StringBuilder sql = new StringBuilder("update talks set ");
+        ArrayList<String> sqlArgs = new ArrayList<>();
+        for (int i = 0; i < args.size(); i++) {
+            if (args.get(i).toLowerCase().startsWith("-ti")) {
+                sqlArgs.add("title='" + args.get(++i) + "'");
+            }
+            if (args.get(i).toLowerCase().startsWith("-de")) {
+                sqlArgs.add("description='" + args.get(++i) + "'");
+
+            }
+            if (args.get(i).toLowerCase().startsWith("-to")) {
+                sqlArgs.add("topic='" + args.get(++i) + "'");
+            }
+        }
+        if (!sqlArgs.isEmpty()) {
+            try{
+            for (int y = 0; y < sqlArgs.size(); y++) {
+                sql.append(sqlArgs.get(y));
+                if (++y < sqlArgs.size()) {
+                    sql.append(", ");
+                }
+            }
+            }
+            finally {
+                sql.append(" where talk_id=").append(id);
+                return sql.toString();
+            }
+
+        }
+
+        return sql.toString();
+    }
 
 
 }

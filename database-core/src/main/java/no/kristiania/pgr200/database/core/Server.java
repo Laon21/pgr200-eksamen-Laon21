@@ -1,9 +1,7 @@
 package no.kristiania.pgr200.database.core;
 
-import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGPoolingDataSource;
-
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,17 +18,21 @@ public class Server {
     private InputStream input;
     private OutputStream output;
     private String dbConnUrl, dbPassword, dbUserName;
-
-
     private Database db;
 
 
-    public Server() throws IOException {
-        serverSocket = new ServerSocket(0);
+    public Server(){
+
+        try {
+            serverSocket = new ServerSocket(0);
+        } catch (IOException e) {
+            System.out.println("io exception thrown in server");
+        }
+        assert serverSocket != null;
         this.port = serverSocket.getLocalPort();
         System.out.println("Server online on port: " + port);
         db = new Database(createDataSource());
-        new Thread(() -> startServer()).start();
+        new Thread(this::startServer).start();
 
     }
 
@@ -48,7 +50,7 @@ public class Server {
                 // "list"
                 // "show $id"
                 // "update" #TODO find a way to solve this
-                String[] requestLine = readNextLine(input).split(" ");
+                String[] requestLine = readNextLine(input).split("\\+");
 
 
                 if (requestLine[0].startsWith("Add")) {
@@ -64,12 +66,8 @@ public class Server {
                             newTalk.setTopic(requestLine[++i]);
                         }
                     }
-                    try {
-                        db.insertTalk(newTalk);
-                        output.write(("Inserted with id" + newTalk.getId()).getBytes());
-                    } catch (SQLException e) {
-                        System.out.println("Failed to insert");
-                    }
+                    db.insertTalk(newTalk);
+                    output.write(("Inserted with id" + newTalk.getId()).getBytes());
                 }
 
                 if (requestLine[0].startsWith("list")) {
@@ -83,7 +81,7 @@ public class Server {
 
                 }
 
-                if(requestLine[0].startsWith("show")){
+                if (requestLine[0].startsWith("show")) {
                     try {
                         output.write((db.getTalk(Integer.parseInt(requestLine[1])).toString()).getBytes());
                     } catch (SQLException e) {
@@ -100,7 +98,7 @@ public class Server {
         }
     }
 
-    public int getPort(){
+    public int getPort() {
         return this.port;
     }
 
@@ -120,6 +118,7 @@ public class Server {
             }
             currentLine.append((char) line);
         }
+        System.out.println(currentLine);
         return currentLine.toString();
     }
 
