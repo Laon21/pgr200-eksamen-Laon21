@@ -9,22 +9,24 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+
+import static com.microsoft.sqlserver.jdbc.StringUtils.isInteger;
 
 public class Server {
 
     private ServerSocket serverSocket;
     private int port;
-    private InputStream input;
-    private OutputStream output;
     private String dbConnUrl, dbPassword, dbUserName;
     private Database db;
 
 
-    public Server(){
+    public Server(int port){
 
         try {
-            serverSocket = new ServerSocket(0);
+            serverSocket = new ServerSocket(port);
         } catch (IOException e) {
             System.out.println("io exception thrown in server");
         }
@@ -33,6 +35,11 @@ public class Server {
         System.out.println("Server online on port: " + port);
         db = new Database(createDataSource());
         new Thread(this::startServer).start();
+
+    }
+
+    public static void main(String[] args) {
+        Server localServer = new Server(10080);
 
     }
 
@@ -50,46 +57,54 @@ public class Server {
                 // "list"
                 // "show $id"
                 // "update" #TODO find a way to solve this
-                String[] requestLine = readNextLine(input).split("\\+");
+                String[] requestLine = readNextLine(input).split(" ");
 
 
-                if (requestLine[0].startsWith("Add")) {
-                    Talk newTalk = new Talk();
-                    for (int i = 0; i < requestLine.length; i++) {
-                        if (requestLine[i].toLowerCase().startsWith("-ti")) {
-                            newTalk.setTitle(requestLine[++i]);
-                        }
-                        if (requestLine[i].toLowerCase().startsWith("-de")) {
-                            newTalk.setDescription(requestLine[++i]);
-                        }
-                        if (requestLine[i].toLowerCase().startsWith("-to")) {
-                            newTalk.setTopic(requestLine[++i]);
-                        }
+
+                if (requestLine[0].equalsIgnoreCase("POST")) {
+                    Map<String, String > parameters = new HashMap<>();
+                    for (String param :requestLine[2].split("&")) {
+                        parameters.put(param.split("=")[0].toLowerCase(),param.split("=")[1].toLowerCase());
                     }
+                    Talk newTalk = new Talk();
+                    newTalk.setTitle(parameters.get("title"));
+                    newTalk.setDescription(parameters.get("description"));
+                    newTalk.setTopic(parameters.get("topic"));
+
                     db.insertTalk(newTalk);
-                    output.write(("Inserted with id" + newTalk.getId()).getBytes());
+                    output.write(("Inserted with id" + newTalk.getId()+ "\r\n").getBytes());
                 }
 
-                if (requestLine[0].startsWith("list")) {
+                else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("list")) {
                     try {
                         for (Talk talk : db.listAll()) {
                             output.write((talk).toString().getBytes());
                         }
+                        if(db.listAll().isEmpty()){
+                            output.write(("There was nothing to print!?").getBytes());
+                        }
                     } catch (SQLException e) {
                         System.out.println("Failed to list talks");
+                        break;
                     }
 
                 }
 
-                if (requestLine[0].startsWith("show")) {
+                else if (isInteger(requestLine[1].split("/")[3])) {
                     try {
-                        output.write((db.getTalk(Integer.parseInt(requestLine[1])).toString()).getBytes());
+                        output.write((db.getTalk(Integer.parseInt(requestLine[1].split("/")[3])).toString()).getBytes());
                     } catch (SQLException e) {
                         System.out.println("Something went wrong");
+                        break;
                     }
+                     catch (NullPointerException e){
+                         System.out.println("No element with that id found");
+                         break;
+                     }
                 }
-
-
+                output.write(("Connection: closed \r\n"). getBytes());
+                output.flush();
+                clientSocket.close();
             } catch (IOException e) {
                 System.out.println("Something went wrong when handling input");
             }
@@ -118,7 +133,6 @@ public class Server {
             }
             currentLine.append((char) line);
         }
-        System.out.println(currentLine);
         return currentLine.toString();
     }
 

@@ -27,13 +27,15 @@ public class HttpResponse {
         String line;
         StringBuilder body = new StringBuilder();
         while ((line = reader.readLine()) != null) {
-            body.append(reader.readLine());
-            break;
+            body.append(line).append("\r\n");
+            if(line.isEmpty()){
+                break;
+            }
         }
         responseBody = body.toString();
     }
 
-    public void printResonse(){
+    public void printResponse(){
         System.out.println(responseBody);
     }
 

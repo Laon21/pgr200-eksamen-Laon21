@@ -1,13 +1,8 @@
 package no.kristiania.pgr200.database.main;
-
 import no.kristiania.pgr200.database.core.HttpRequest;
 import no.kristiania.pgr200.database.core.HttpResponse;
 import no.kristiania.pgr200.database.core.Server;
-import no.kristiania.pgr200.database.core.Talk;
-
-import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.Scanner;
 
 
 public class Client {
@@ -15,39 +10,29 @@ public class Client {
     private static LinkedHashMap<String, String> arguments;
     static StringBuilder httpString;
 
-    static Server server;
     private static String target = "localhost";
     static String method;
     static String requestString;
 
 
     public static void main(String[] args){
-        server = new Server();
         if (args.length == 0) {
-            System.out.println("Try with an argument");
-            System.out.print("add -title {title} -description {description} -topic {topic}");
-            System.out.print("list");
-            System.out.print("show {id}");
-            System.out.print("update {id} -{column} {value}");
-            System.out.print("resetdb");
-            Scanner userInput = new Scanner(System.in);
-            if(userInput.next().equalsIgnoreCase("add")){
-                String method = "add ";
-            System.out.print("Title? ");
-            httpString.append("Title=").append(userInput.nextLine()).append("&");
-            System.out.print("Description? ");
-                httpString.append("Description=").append(userInput.nextLine()).append("&");
-                System.out.print("Topic? ");
-                httpString.append("Topic=").append(userInput.nextLine());
-                requestString = httpString.toString().replace(" ", "+");
-                sendRequest(target,server.getPort(),method, requestString).printResonse();
-            }
-
+            noArguments();
         }
         requestStringBuilder(args);
         String method = httpString.toString().split(" ")[0];
         String requestString = httpString.toString().split(" ")[1].replace(" ", "+");
-        sendRequest(target,server.getPort(),method, requestString);
+        sendRequest(target,10080,method, requestString).printResponse();
+    }
+
+    private static void noArguments() {
+        System.out.println("Try with an argument");
+        System.out.print("add -title {title} -description {description} -topic {topic}");
+        System.out.print("list");
+        System.out.print("show {id}");
+        System.out.print("update {id} -{column} {value}");
+        System.out.print("resetdb");
+
     }
 
     private static HttpResponse sendRequest(String target, int port, String method, String requestString) {
@@ -88,6 +73,10 @@ public class Client {
         }
         if (args[0].equalsIgnoreCase("show")) {
             arguments.put("id", args[1]);
+        }
+
+        if (args[0].equalsIgnoreCase("list")) {
+            arguments.put("id", "all");
         }
 
         return arguments;
