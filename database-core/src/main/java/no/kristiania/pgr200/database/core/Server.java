@@ -2,6 +2,7 @@ package no.kristiania.pgr200.database.core;
 
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGPoolingDataSource;
+
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +24,7 @@ public class Server {
     private Database db;
 
 
-    public Server(int port){
+    public Server(int port) {
 
         try {
             serverSocket = new ServerSocket(port);
@@ -51,36 +52,36 @@ public class Server {
                 InputStream input = clientSocket.getInputStream();
                 OutputStream output = clientSocket.getOutputStream();
 
-
-                //requestLine should look like this
-                // "add -ti% $title -de% $description -to% $topic
-                // "list"
-                // "show $id"
-                // "update" #TODO find a way to solve this
                 String[] requestLine = readNextLine(input).split(" ");
 
 
-
                 if (requestLine[0].equalsIgnoreCase("POST")) {
-                    Map<String, String > parameters = new HashMap<>();
-                    for (String param :requestLine[2].split("&")) {
-                        parameters.put(param.split("=")[0].toLowerCase(),param.split("=")[1].toLowerCase());
+                    Map<String, String> parameters = new HashMap<>();
+                    for (String param : requestLine[2].split("&")) {
+                        parameters.put(param.split("=")[0].toLowerCase(), param.split("=")[1].toLowerCase());
                     }
-                    Talk newTalk = new Talk();
-                    newTalk.setTitle(parameters.get("title"));
-                    newTalk.setDescription(parameters.get("description"));
-                    newTalk.setTopic(parameters.get("topic"));
+                    if (requestLine[1].toLowerCase().contains("update")) {
+                        try {
+                            db.updateTalk(parameters);
+                            output.write(("Updated element with id" + parameters.get("id") + "\r\n").getBytes());
+                        } catch (SQLException e) {
+                            System.out.println("failed to update object");
+                        }
+                    } else {
+                        Talk newTalk = new Talk();
+                        newTalk.setTitle(parameters.get("title"));
+                        newTalk.setDescription(parameters.get("description"));
+                        newTalk.setTopic(parameters.get("topic"));
 
-                    db.insertTalk(newTalk);
-                    output.write(("Inserted with id" + newTalk.getId()+ "\r\n").getBytes());
-                }
-
-                else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("list")) {
+                        db.insertTalk(newTalk);
+                        output.write(("Inserted with id" + newTalk.getId() + "\r\n").getBytes());
+                    }
+                } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("list")) {
                     try {
                         for (Talk talk : db.listAll()) {
                             output.write(((talk).toString() + "\r\n").getBytes());
                         }
-                        if(db.listAll().isEmpty()){
+                        if (db.listAll().isEmpty()) {
                             output.write(("There was nothing to print!?").getBytes());
                         }
                     } catch (SQLException e) {
@@ -88,22 +89,19 @@ public class Server {
                         break;
                     }
 
-                }
-
-                else if (isInteger(requestLine[1].split("/")[3])) {
+                } else if (isInteger(requestLine[1].split("/")[3])) {
                     try {
                         output.write(db.getTalk(Integer.parseInt(requestLine[1].split("/")[3])).toString().getBytes());
                         output.write(("\r\n").getBytes());
                     } catch (SQLException e) {
                         System.out.println("Something went wrong");
                         break;
+                    } catch (NullPointerException e) {
+                        System.out.println("No element with that id found");
+                        break;
                     }
-                     catch (NullPointerException e){
-                         System.out.println("No element with that id found");
-                         break;
-                     }
                 }
-                output.write(("Connection: closed \r\n"). getBytes());
+                output.write(("Connection: closed \r\n").getBytes());
                 output.flush();
                 clientSocket.close();
             } catch (IOException e) {

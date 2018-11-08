@@ -1,7 +1,9 @@
 package no.kristiania.pgr200.database.main;
+
 import no.kristiania.pgr200.database.core.HttpRequest;
 import no.kristiania.pgr200.database.core.HttpResponse;
-import no.kristiania.pgr200.database.core.Server;
+
+
 import java.util.LinkedHashMap;
 
 
@@ -15,32 +17,33 @@ public class Client {
     static String requestString;
 
 
-    public static void main(String[] args){
-        try{
-        if (args.length == 0) {
-            noArguments();
-        }
-        requestStringBuilder(args);
-        String method = httpString.toString().split(" ")[0];
-        String requestString = httpString.toString().split(" ")[1].replace(" ", "+");
-        sendRequest(target,10080,method, requestString).printResponse();}
-        catch (NullPointerException e){
+    public static void main(String[] args) {
+        try {
+            if (args.length == 0) {
+                noArguments();
+                System.exit(1);
+            }
+            requestStringBuilder(args);
+            String method = httpString.toString().split(" ")[0];
+            String requestString = httpString.toString().split(" ")[1].replace(" ", "+");
+            sendRequest(target, 10080, method, requestString).printResponse();
+        } catch (NullPointerException e) {
             System.out.println("Check if server is online before trying again");
         }
     }
 
     private static void noArguments() {
         System.out.println("Try with an argument");
-        System.out.print("add -title {title} -description {description} -topic {topic}");
-        System.out.print("list");
-        System.out.print("show {id}");
-        System.out.print("update {id} -{column} {value}");
-        System.out.print("resetdb");
+        System.out.println("add -title {title} -description {description} -topic {topic}");
+        System.out.println("list");
+        System.out.println("show {id}");
+        System.out.println("update {id} -{column} {value}");
+        System.out.println("resetdb");
 
     }
 
     private static HttpResponse sendRequest(String target, int port, String method, String requestString) {
-        HttpRequest request = new HttpRequest(target,port ,method, requestString);
+        HttpRequest request = new HttpRequest(target, port, method, requestString);
         return request.execute();
     }
 
@@ -65,7 +68,10 @@ public class Client {
         arguments = new LinkedHashMap<>();
         httpString.append(args[0]).append(" ");
         if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("update")) {
-            for (int i = 0; i < args.length; i++) {
+            if(args[0].equalsIgnoreCase("update")){
+                arguments.put("id", args[1]);
+            }
+            for (int i = 0; i < args.length - 1; i++) {
                 if (args[i].toLowerCase().startsWith("-ti")) {
                     arguments.put("Title", args[i + 1]);
                 } else if (args[i].toLowerCase().startsWith("-de")) {
@@ -75,11 +81,10 @@ public class Client {
                 }
             }
         }
-        if (args[0].equalsIgnoreCase("show")) {
+        else if (args[0].equalsIgnoreCase("show")) {
             arguments.put("id", args[1]);
         }
-
-        if (args[0].equalsIgnoreCase("list")) {
+        else if (args[0].equalsIgnoreCase("list")) {
             arguments.put("id", "all");
         }
 

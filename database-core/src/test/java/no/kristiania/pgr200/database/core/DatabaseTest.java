@@ -8,7 +8,9 @@ import org.junit.Test;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,12 +48,13 @@ public class DatabaseTest {
         DataSource dataSource = createDataSource();
         Database db = new Database(dataSource);
         Talk testTalk = sampleTalk();
-        List<String> fakeArgs = new ArrayList<String>();
-        fakeArgs.add("-title");
-        fakeArgs.add("5");
+        Map<String, String> fakeArgs = new HashMap<>();
+
             try {
                 db.insertTalk(testTalk);
-                db.updateTalk(testTalk.getId(),fakeArgs);
+                fakeArgs.put("title", "5");
+                fakeArgs.put("id",String.valueOf(testTalk.getId()));
+                db.updateTalk(fakeArgs);
                 assertThat(db.getTalk(testTalk.getId()).getTitle()).isEqualToIgnoringCase("5");
             } catch (SQLException e) {
                 e.printStackTrace();

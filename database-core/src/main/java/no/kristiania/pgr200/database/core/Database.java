@@ -4,6 +4,7 @@ import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Database extends DaoMethods {
 
@@ -52,38 +53,38 @@ public class Database extends DaoMethods {
         return getSingleObject("select * FROM TALKS where talk_id = " + id, result -> mapToTalk(result));
     }
 
-    public void updateTalk(int id, List<String> args) throws SQLException {
-        String sql = checkUpdateArgs(id, args);
+    public void updateTalk(Map<String, String> arguments) throws SQLException {
+        String sql = checkUpdateArgs( arguments);
         updateSingleObject(sql, result -> mapToTalk(result));
-        System.out.println("Updated values of talk " + id);
+        System.out.println("Updated values of talk " + arguments.get("id"));
     }
 
-    private String checkUpdateArgs(int id, List<String> args) {
+    private String checkUpdateArgs(Map<String, String> arguments) {
         StringBuilder sql = new StringBuilder("update talks set ");
         ArrayList<String> sqlArgs = new ArrayList<>();
-        for (int i = 0; i < args.size(); i++) {
-            if (args.get(i).toLowerCase().startsWith("-ti")) {
-                sqlArgs.add("title='" + args.get(++i) + "'");
+        for (int i = 0; i < arguments.size(); i++) {
+            if (arguments.containsKey("title")) {
+                sqlArgs.add("title='" + arguments.get("title") + "'");
             }
-            if (args.get(i).toLowerCase().startsWith("-de")) {
-                sqlArgs.add("description='" + args.get(++i) + "'");
+            if (arguments.containsKey("description")) {
+                sqlArgs.add("description='" + arguments.get("description") + "'");
 
             }
-            if (args.get(i).toLowerCase().startsWith("-to")) {
-                sqlArgs.add("topic='" + args.get(++i) + "'");
+            if (arguments.containsKey("topic")) {
+                sqlArgs.add("topic='" + arguments.get("TOPIC") + "'");
             }
         }
-        if (!sqlArgs.isEmpty()) {
+        if (!arguments.isEmpty()) {
             try{
             for (int y = 0; y < sqlArgs.size(); y++) {
                 sql.append(sqlArgs.get(y));
                 if (++y < sqlArgs.size()) {
-                    sql.append(", ");
+                    sql.deleteCharAt(sql.lastIndexOf(","));
                 }
             }
             }
             finally {
-                sql.append(" where talk_id=").append(id);
+                sql.append(" where talk_id=").append(arguments.get("id"));
                 return sql.toString();
             }
 

@@ -17,7 +17,7 @@ public class HttpRequest {
         this.hostname = hostname;
         this.port = port;
         this.command = method;
-        if (method.equalsIgnoreCase("add")) {
+        if (method.equalsIgnoreCase("add") || method.equalsIgnoreCase("update")) {
             this.method = "POST";
         } else {
             this.method = "GET";
@@ -48,19 +48,20 @@ public class HttpRequest {
 
 
     public void writeRequest(OutputStream output) throws IOException {
-        if(command.equalsIgnoreCase("add")){
-            output.write((method + " " + path + " " + request+" HTTP/1.1\r\n").getBytes());
+        if (command.equalsIgnoreCase("add")) {
+            output.write((method + " " + path + " " + request + " HTTP/1.1\r\n").getBytes());
             output.write("\r\n\r\n".getBytes());
-        }
-
-
-        else if (command.equalsIgnoreCase("show")) {
-            output.write((method + " " + path + "/"+ request.split("=")[1] + " HTTP/1.1\r\n").getBytes());
+        } else if (command.equalsIgnoreCase("show")) {
+            output.write((method + " " + path + "/" + request.split("=")[1] + " HTTP/1.1\r\n").getBytes());
             output.write("\r\n\r\n".getBytes());
-        }
-
-        else if(command.equalsIgnoreCase("list")){
-            output.write((method + " " + path + "/"+ command ).getBytes());
+        } else if (command.equalsIgnoreCase("list")) {
+            output.write((method + " " + path + "/" + command  + " HTTP/1.1\r\n").getBytes());
+            output.write("\r\n\r\n".getBytes());
+        } else if (command.equalsIgnoreCase("update")) {
+            output.write((method + " " + path + "/" + command +" "+ request  + " HTTP/1.1\r\n").getBytes());
+            output.write("\r\n\r\n".getBytes());
+        } else if (command.equalsIgnoreCase("resetdb")) {
+            output.write((method + " " + path + "/" + command  + " HTTP/1.1\r\n").getBytes());
             output.write("\r\n\r\n".getBytes());
         }
 
