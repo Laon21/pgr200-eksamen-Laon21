@@ -88,6 +88,16 @@ public class Server {
                         System.out.println("Failed to list talks");
                         break;
                     }
+                } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("resetdb")) {
+                    try {
+                        db.resetdb();
+                        output.write(("All eleMENts, eleWOMENts and eleCHILDRENts was deleted. I hope you're happy. \r\n").getBytes());
+                        output.write(("Server will shutdown to apply changes \r\n").getBytes());
+                    } catch (SQLException e) {
+                        System.out.println("Failed to drop tables");
+                        break;
+                    }
+
 
                 } else if (isInteger(requestLine[1].split("/")[3])) {
                     try {

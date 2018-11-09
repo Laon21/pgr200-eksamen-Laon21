@@ -4,12 +4,18 @@ import org.junit.Test;
 
 public class ServerTest {
 
-@Test
-    public void shoulGetRequestAndRespond(){
-    Server server = new Server(0);
+    @Test
+    public void shouldGetRequestAndRespond() {
+        Server server = new Server(0);
+        HttpRequest request = new HttpRequest("localhost", server.getPort(), "add", "Titel=hei&Description=Test&Topic=12");
+        request.execute().printResponse();
+    }
 
-    HttpRequest request = new HttpRequest("localhost", server.getPort(), "add", "Titel=hei&Description=Test&Topic=12");
-    request.execute().printResponse();
+    @Test
+    public void shouldGetId(){
+        Server server = new Server(0);
+        HttpRequest request = new HttpRequest("localhost", server.getPort(), "show", "1");
+        request.execute().printResponse();
 
     }
 

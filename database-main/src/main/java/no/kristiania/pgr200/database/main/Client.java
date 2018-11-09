@@ -62,7 +62,7 @@ public class Client {
         method = httpString.toString().split(" ")[0];
         requestString = httpString.toString().replace(" ", "+");
         httpString = new StringBuilder(requestString);
-        httpString.delete(0, httpString.indexOf("+")+1);
+        httpString.delete(0, httpString.indexOf("+") + 1);
         requestString = httpString.toString();
 
     }
@@ -71,7 +71,7 @@ public class Client {
         arguments = new LinkedHashMap<>();
         httpString.append(args[0]).append(" ");
         if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("update")) {
-            if(args[0].equalsIgnoreCase("update")){
+            if (args[0].equalsIgnoreCase("update")) {
                 arguments.put("id", args[1]);
             }
             for (int i = 0; i < args.length - 1; i++) {
@@ -83,19 +83,18 @@ public class Client {
                     arguments.put("Topic", args[i + 1]);
                 }
             }
-        }
-        else if (args[0].equalsIgnoreCase("show")) {
+        } else if (args[0].equalsIgnoreCase("show")) {
             arguments.put("id", args[1]);
-        }
-        else if (args[0].equalsIgnoreCase("list")) {
+        } else if (args[0].equalsIgnoreCase("list")) {
             arguments.put("id", "all");
+        } else if (args[0].equalsIgnoreCase("resetdb")) {
+            arguments.put("ground", "zero");
         }
-
         return arguments;
     }
-    
-    public static LinkedHashMap<String, String> getArgumentsMap(){
-    	return arguments;
+
+    public static LinkedHashMap<String, String> getArgumentsMap() {
+        return arguments;
     }
 
 

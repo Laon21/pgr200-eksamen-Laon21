@@ -64,6 +64,7 @@ public class HttpRequest {
             output.write((method + " " + path + "/" + command  + " HTTP/1.1\r\n").getBytes());
             output.write("\r\n\r\n".getBytes());
         }
+        
 
     }
 

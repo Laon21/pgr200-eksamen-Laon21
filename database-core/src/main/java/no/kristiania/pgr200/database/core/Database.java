@@ -1,5 +1,7 @@
 package no.kristiania.pgr200.database.core;
 
+import org.flywaydb.core.Flyway;
+
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -91,6 +93,16 @@ public class Database extends DaoMethods {
         }
 
         return sql.toString();
+    }
+
+    public void resetdb() throws SQLException {
+        try (Connection conn = dataSource.getConnection()) {
+            String sql = "drop table conference, talks, days, flyway_schema_history, time_slots, tracks";
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
+                statement.executeUpdate();
+                Flyway.configure().dataSource(dataSource).load().baseline();
+            }
+        }
     }
 
 
