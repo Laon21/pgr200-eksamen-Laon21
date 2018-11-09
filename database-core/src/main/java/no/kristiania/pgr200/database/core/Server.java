@@ -58,7 +58,7 @@ public class Server {
                 if (requestLine[0].equalsIgnoreCase("POST")) {
                     Map<String, String> parameters = new HashMap<>();
                     for (String param : requestLine[2].split("&")) {
-                        parameters.put(param.split("=")[0].toLowerCase(), param.split("=")[1].toLowerCase());
+                        parameters.put(param.split("=")[0].toLowerCase(), param.split("=")[1].replaceAll("\\+", " ").toLowerCase());
                     }
                     if (requestLine[1].toLowerCase().contains("update")) {
                         try {

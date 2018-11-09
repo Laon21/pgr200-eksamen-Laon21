@@ -24,8 +24,8 @@ public class Client {
                 System.exit(1);
             }
             requestStringBuilder(args);
-            String method = httpString.toString().split(" ")[0];
-            String requestString = httpString.toString().split(" ")[1].replace(" ", "+");
+            //String method = httpString.toString().split(" ")[0];
+            //String requestString = httpString.toString().split(" ")[1].replace(" ", "+");
             sendRequest(target, 10080, method, requestString).printResponse();
         } catch (NullPointerException e) {
             System.out.println("Check if server is online before trying again");
@@ -60,7 +60,10 @@ public class Client {
                 );
         httpString.deleteCharAt(httpString.lastIndexOf("&"));
         method = httpString.toString().split(" ")[0];
-        requestString = httpString.toString().split(" ")[1].replace(" ", "+");
+        requestString = httpString.toString().replace(" ", "+");
+        httpString = new StringBuilder(requestString);
+        httpString.delete(0, httpString.indexOf("+")+1);
+        requestString = httpString.toString();
 
     }
 
@@ -89,6 +92,10 @@ public class Client {
         }
 
         return arguments;
+    }
+    
+    public static LinkedHashMap<String, String> getArgumentsMap(){
+    	return arguments;
     }
 
 
