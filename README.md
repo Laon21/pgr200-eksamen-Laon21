@@ -23,7 +23,7 @@ Espen Høines (laon21) & William Nordli (norwil17)
 1. Naviger til prosjektmappen
 2. Start Server.jar i commandline med java -jar database-main/target/Server.jar
 
-3. Kjør Client.jar med argumenter f.eks:
+3. Kjør Client.jar i et nytt vindu med argumenter f.eks:
 
 java -jar database-main/target/Client.jar resetdb
 
