@@ -2,6 +2,32 @@
 PGR200 Eksamen
 Espen Høines (laon21) & William Nordli (norwil17)
 
+## Forbredelser
+1. Last ned eller klon prosjektet
+2. Pass på at både Java og Maven er riktig installert
+
+----Maven-----
+3. kjør "mvn package" i prosjektmappen
+4. Naviger til database-main/target/ og åpne Server.jar som et arkiv (7zip, winrar)
+5. Endre verdiene i innlevering.properties til å stemme med din database
+
+----IDE----
+3. naviger til database-core\src\main\resources
+4. Endre verdiene i innlevering.properties til å stemme med din database
+5. kjør "mvn package" i prosjektmappen
+
+
+## For å kjøre programmet:
+1. Naviger til prosjektmappen
+2. Start Server.jar i commandline, java -jar database-main/target/Server.jar
+3. Kjør Client.jar med argumenter f.eks:
+java -jar database-main/target/Client.jar resetdb
+java -jar database-main/target/Client.jar add -title "Eksempel tittel" -de(scription) "En test av programmet" -to(pic) "How2guide"
+java -jar database-main/target/Client.jar add -ti "Selvskading uten arr" -de "NRK satirisk med ville ideer" -to "Komedie"
+java -jar database-main/target/Client.jar list
+java -jar database-main/target/Client.jar update 1 -title "Ny tittel" -topic "Noe nytt"
+java -jar database-main/target/Client.jar show 1
+
 # PGR200 Hovedinnlevering
 
 Innleveringsfrist: 12. november kl 09:00. **Viktig:** WiseFlow *stenger* når fristen er ute - lever i tide.
