@@ -2,6 +2,7 @@ package no.kristiania.pgr200.database.main;
 
 import no.kristiania.pgr200.database.core.HttpRequest;
 import no.kristiania.pgr200.database.core.HttpResponse;
+
 import java.util.LinkedHashMap;
 
 
@@ -12,6 +13,7 @@ public class Client {
     private static String target = "localhost";
     static String method;
     static String requestString;
+
 
     /**
      * Runs when program is started, takes args from the user and executes a request to the server.

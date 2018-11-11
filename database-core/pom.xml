@@ -12,7 +12,6 @@
     <artifactId>database-core</artifactId>
 
     <dependencies>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -70,11 +69,7 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
-
-
             </plugin>
         </plugins>
     </build>
-
-
 </project>

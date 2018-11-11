@@ -207,7 +207,7 @@ public class Server {
     private void readPropertiesFile() {
         Properties props = new Properties();
         try {
-            String dbSettingsPropertyFile = "./innlevering.properties";
+            String dbSettingsPropertyFile = "innlevering.properties";
             props.load(getClass().getClassLoader().getResourceAsStream(dbSettingsPropertyFile));
         } catch (IOException e) {
             System.out.println("file not found");
