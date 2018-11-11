@@ -2,8 +2,6 @@ package no.kristiania.pgr200.database.main;
 
 import no.kristiania.pgr200.database.core.HttpRequest;
 import no.kristiania.pgr200.database.core.HttpResponse;
-
-
 import java.util.LinkedHashMap;
 
 
@@ -42,7 +40,7 @@ public class Client {
         System.out.println("list");
         System.out.println("show {id}");
         System.out.println("update {id} -{column} {value}");
-        System.out.println("resetdb");
+        System.out.println("resetDb");
 
     }
 
@@ -113,7 +111,7 @@ public class Client {
             arguments.put("id", args[1]);
         } else if (args[0].equalsIgnoreCase("list")) {
             arguments.put("id", "all");
-        } else if (args[0].equalsIgnoreCase("resetdb")) {
+        } else if (args[0].equalsIgnoreCase("resetDb")) {
             arguments.put("ground", "zero");
         }
         return arguments;

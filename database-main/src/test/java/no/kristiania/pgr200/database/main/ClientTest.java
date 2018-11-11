@@ -19,6 +19,5 @@ public class ClientTest {
 	public void shouldBuildRequestString() {
 		Client.main(new String[]{"add", "-title", "1 2", "-description", "2", "-top", "3"});
 		assertEquals(Client.getRequestString(), "Title=1+2&Description=2&Topic=3");
-
 	}
 }

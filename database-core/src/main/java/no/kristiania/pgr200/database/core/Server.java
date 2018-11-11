@@ -2,15 +2,12 @@ package no.kristiania.pgr200.database.core;
 
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGPoolingDataSource;
-
 import javax.sql.DataSource;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -19,7 +16,7 @@ public class Server {
 
     private ServerSocket serverSocket;
     private int port;
-    private String dbConnUrl, dbPassword, dbUserName;
+    private String dataSourceUrl, dataSourcePassword, dataSourceUsername;
     private Database db;
 
 
@@ -35,14 +32,15 @@ public class Server {
         System.out.println("Server online on port: " + port);
         db = new Database(createDataSource());
         new Thread(this::startServer).start();
-
     }
 
     public static void main(String[] args) {
         Server localServer = new Server(10080);
-
     }
 
+    /**
+     * Waits for a connection then executes the request from the client
+     */
     private void startServer() {
         while (true) {
             try {
@@ -56,7 +54,7 @@ public class Server {
                     postRequest(output, requestLine);
                 } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("list")) {
                     listAllTalks(output);
-                } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("resetdb")) {
+                } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("resetDb")) {
                     resetDb(output);
                 } else if (isInteger(requestLine[1].split("/")[3])) {
                     showElementWithId(output, requestLine[1]);
@@ -72,10 +70,9 @@ public class Server {
 
     /**
      * If its a post request this is run
-     *
-     * @param output      HTTP response
-     * @param requestLine HTTP request
-     * @throws IOException OutputStream for the HTTP response
+     * @param output OutputStream for the http response
+     * @param requestLine HTTP requestLine from the client
+     * @throws IOException OutputStream
      */
     private void postRequest(OutputStream output, String[] requestLine) throws IOException {
         Map<String, String> parameters = new HashMap<>();
@@ -89,42 +86,49 @@ public class Server {
         }
     }
 
+    /**
+     * Creates a new Talk object and inserts it into the database
+     * @param output OutputStream for the http response
+     * @param parameters Map containing keys (columns) and value for the new object
+     * @throws IOException OutputStream
+     */
     private void insertNewTalk(OutputStream output, Map<String, String> parameters) throws IOException {
         Talk newTalk = new Talk();
         newTalk.setTitle(parameters.get("title"));
         newTalk.setDescription(parameters.get("description"));
         newTalk.setTopic(parameters.get("topic"));
-
         db.insertTalk(newTalk);
-        output.write(("Inserted with id" + newTalk.getId() + "\r\n").getBytes());
+        output.write(("Inserted "+ newTalk.getTitle() + " with id" + newTalk.getId() + "\r\n").getBytes());
     }
 
+    /**
+     * Updates a element in the database with the provided ID
+     * @param output OutputStream for the http response
+     * @param parameters Map containing the new values for columns in the database. Key is column name
+     * @throws IOException OutputStream
+     */
     private void updateTalkWithId(OutputStream output, Map<String, String> parameters) throws IOException {
-        try {
-            db.updateTalk(parameters);
-            output.write(("Updated element with id" + parameters.get("id") + "\r\n").getBytes());
-        } catch (SQLException e) {
-            System.out.println("failed to update object");
-        }
+        db.updateTalk(parameters);
+        output.write(("Updated element with id" + parameters.get("id") + "\r\n").getBytes());
     }
 
+    /**
+     * Gets all elements in the database and returns them to the client
+     * @param output OutputStream for the http response
+     * @throws IOException OutputStream
+     */
     private void listAllTalks(OutputStream output) throws IOException {
-        try {
-            for (Talk talk : db.listAll()) {
-                output.write(((talk).toString() + "\r\n").getBytes());
-            }
-            if (db.listAll().isEmpty()) {
-                output.write(("There was nothing to print!?").getBytes());
-            }
-        } catch (SQLException e) {
-            System.out.println("Failed to list talks");
+        for (Talk talk : db.listAll()) {
+            output.write(((talk).toString() + "\r\n").getBytes());
+        }
+        if (db.listAll().isEmpty()) {
+            output.write(("There was nothing to print!?").getBytes());
         }
     }
 
     /**
      * Tries to find the element with provided ID in the database
-     *
-     * @param output  Output stream for the HTTP response
+     * @param output  OutputStream for the http response
      * @param request HTTP request
      * @throws IOException OutputStream
      */
@@ -132,8 +136,6 @@ public class Server {
         try {
             output.write(db.getTalk(Integer.parseInt(request.split("/")[3])).toString().getBytes());
             output.write(("\r\n").getBytes());
-        } catch (SQLException e) {
-            System.out.println("Something went wrong with the database");
         } catch (NullPointerException e) {
             System.out.println("No element with that id found");
         }
@@ -142,22 +144,18 @@ public class Server {
     /**
      * This makes the database drop all information and start anew
      * Server will shut down to apply updates. #TODO separate DB and server to avoid this in the future
-     * @param output Output stream for the http response for the client
+     * @param output OutputStream for the http response
      */
     private void resetDb(OutputStream output) throws IOException {
-        try {
-            db.resetdb();
-            output.write(("All eleMENts, eleWOMENts and eleCHILDRENts was deleted. I hope you're happy. \r\n").getBytes());
-            output.write(("Server will shutdown to apply changes \r\n").getBytes());
-        } catch (SQLException e) {
-            System.out.println("Failed to drop tables");
-        }
+        db.resetDb();
+        output.write(("All eleMENts, eleWOMENts and eleCHILDRENts was deleted. I hope you're happy. \r\n").getBytes());
+        db = new Database(createDataSource());
     }
 
     /**
      * Checks if the string is an Integer
      *
-     * @param input Http request
+     * @param input Http requestString
      * @return true if Integer, else false
      */
     private boolean isInteger(String input) {
@@ -195,9 +193,9 @@ public class Server {
     public DataSource createDataSource() {
         PGPoolingDataSource dataSource = new PGPoolingDataSource();
         readPropertiesFile();
-        dataSource.setUrl(dbConnUrl);
-        dataSource.setUser(dbUserName);
-        dataSource.setPassword(dbPassword);
+        dataSource.setUrl(dataSourceUrl);
+        dataSource.setUser(dataSourceUsername);
+        dataSource.setPassword(dataSourcePassword);
         Flyway.configure().dataSource(dataSource).load().migrate();
         return dataSource;
     }
@@ -209,17 +207,14 @@ public class Server {
     private void readPropertiesFile() {
         Properties props = new Properties();
         try {
-            String dbSettingsPropertyFile = "./eksamen.properties";
+            String dbSettingsPropertyFile = "./innlevering.properties";
             props.load(getClass().getClassLoader().getResourceAsStream(dbSettingsPropertyFile));
         } catch (IOException e) {
             System.out.println("file not found");
         }
-
-
-        // Get each property value
-        dbConnUrl = props.getProperty("db.conn.url");
-        dbUserName = props.getProperty("db.username");
-        dbPassword = props.getProperty("db.password");
+        dataSourceUrl = props.getProperty("db.conn.url");
+        dataSourceUsername = props.getProperty("db.username");
+        dataSourcePassword = props.getProperty("db.password");
 
     }
 

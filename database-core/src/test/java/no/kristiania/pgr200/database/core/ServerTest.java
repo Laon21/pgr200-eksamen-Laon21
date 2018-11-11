@@ -1,5 +1,6 @@
 package no.kristiania.pgr200.database.core;
 
+
 import org.junit.Test;
 
 public class ServerTest {
@@ -11,12 +12,5 @@ public class ServerTest {
         request.execute().printResponse();
     }
 
-    @Test
-    public void shouldGetId(){
-        Server server = new Server(0);
-        HttpRequest request = new HttpRequest("localhost", server.getPort(), "show", "1");
-        request.execute().printResponse();
-
-    }
 
 }
