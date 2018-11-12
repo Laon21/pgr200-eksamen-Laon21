@@ -18,6 +18,7 @@ public class Server {
     private int port;
     private String dataSourceUrl, dataSourcePassword, dataSourceUsername;
     private Database db;
+    private Boolean doStop = false;
 
 
     public Server(int port) {
@@ -33,6 +34,11 @@ public class Server {
         db = new Database(createDataSource());
         new Thread(this::startServer).start();
     }
+    
+    private synchronized void stopServer() {
+    	System.out.println("Closing connection...");
+    	this.doStop = true;
+    }
 
     public static void main(String[] args) {
         Server localServer = new Server(10080);
@@ -42,7 +48,7 @@ public class Server {
      * Waits for a connection then executes the request from the client
      */
     private void startServer() {
-        while (true) {
+        while (!doStop) {
             try {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connection established");
@@ -58,6 +64,9 @@ public class Server {
                     resetDb(output);
                 } else if (isInteger(requestLine[1].split("/")[3])) {
                     showElementWithId(output, requestLine[1]);
+                } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("stopserver")) {
+                	output.write(("Shutting down server... \r\n").getBytes());
+                	stopServer();
                 }
                 output.write(("Connection: closed \r\n").getBytes());
                 output.flush();

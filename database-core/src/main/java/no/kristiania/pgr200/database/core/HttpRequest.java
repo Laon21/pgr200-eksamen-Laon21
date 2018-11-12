@@ -63,6 +63,9 @@ public class HttpRequest {
         } else if (command.equalsIgnoreCase("resetDb")) {
             output.write((method + " " + path + "/" + command  + " HTTP/1.1\r\n").getBytes());
             output.write("\r\n\r\n".getBytes());
+        }else if (command.equalsIgnoreCase("stopserver")) {
+            output.write((method + " " + path + "/" + command  + " HTTP/1.1\r\n").getBytes());
+            output.write("\r\n\r\n".getBytes());
         }
         
 

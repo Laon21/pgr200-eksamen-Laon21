@@ -132,7 +132,6 @@ public class Database extends DaoMethods {
                 }
             } finally {
                 sql.append(" where talk_id=").append(arguments.get("id"));
-                return sql.toString();
             }
 
         }
@@ -156,6 +155,4 @@ public class Database extends DaoMethods {
             System.out.println("failed to drop tables in the database");
         }
     }
-
-
 }

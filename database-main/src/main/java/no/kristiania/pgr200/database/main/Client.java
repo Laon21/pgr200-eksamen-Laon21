@@ -43,7 +43,6 @@ public class Client {
         System.out.println("show {id}");
         System.out.println("update {id} -{column} {value}");
         System.out.println("resetDb");
-
     }
 
     /**
@@ -115,6 +114,8 @@ public class Client {
             arguments.put("id", "all");
         } else if (args[0].equalsIgnoreCase("resetDb")) {
             arguments.put("ground", "zero");
+        } else if (args[0].equalsIgnoreCase("stopserver")) {
+        	arguments.put("stop", "server");
         }
         return arguments;
     }
