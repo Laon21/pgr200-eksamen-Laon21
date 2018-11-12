@@ -1,6 +1,8 @@
 package no.kristiania.pgr200.database.core;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,6 +42,14 @@ public class ServerTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    @Test
+    public void serverShouldStartAndStop() {
+    	Server server = new Server(0);
+    	assertFalse(server.doStop);
+    	server.stopServer();
+    	assertTrue(server.doStop);
     }
 
     private DataSource createTempDataSource() {

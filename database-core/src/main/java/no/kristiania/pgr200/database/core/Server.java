@@ -20,8 +20,9 @@ public class Server {
     private int port;
     private String dataSourceUrl, dataSourcePassword, dataSourceUsername;
     private static Database db;
-    private Boolean doStop = false;
+    protected Boolean doStop = false;
     protected OutputStream output;
+    protected InputStream input;
 
 
     public Server(int port) {
@@ -38,11 +39,6 @@ public class Server {
         new Thread(this::startServer).start();
     }
 
-    private synchronized void stopServer() {
-        System.out.println("Closing connection...");
-        this.doStop = true;
-    }
-
     @SuppressWarnings("unused")
     public static void main(String[] args) {
         Server localServer = new Server(10080);
@@ -56,7 +52,7 @@ public class Server {
             try {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connection established");
-                InputStream input = clientSocket.getInputStream();
+                input = clientSocket.getInputStream();
                 output = clientSocket.getOutputStream();
                 String[] requestLine = readNextLine(input).split(" ");
 
@@ -79,6 +75,11 @@ public class Server {
                 System.out.println("Something went wrong when handling input or output");
             }
         }
+    }
+    
+    protected synchronized void stopServer() {
+        System.out.println("Closing connection...");
+        this.doStop = true;
     }
 
     /**
@@ -139,7 +140,7 @@ public class Server {
             output.write(((talk).toString() + "\r\n").getBytes());
         }
         if (db.listAll().isEmpty()) {
-            output.write(("There was nothing to print!?").getBytes());
+            output.write(("There was nothing to print.").getBytes());
         }
     }
 
@@ -155,7 +156,7 @@ public class Server {
             output.write(db.getTalk(Integer.parseInt(request.split("/")[3])).toString().getBytes());
             output.write(("\r\n").getBytes());
         } catch (NullPointerException e) {
-            System.out.println("No element with that id found");
+            System.out.println("No element with that id found.");
         }
     }
 

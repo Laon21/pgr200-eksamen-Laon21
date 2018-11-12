@@ -59,7 +59,6 @@ public class DatabaseTest {
 
     private DataSource createDataSource() {
         return getDataSource();
-
     }
 
 }

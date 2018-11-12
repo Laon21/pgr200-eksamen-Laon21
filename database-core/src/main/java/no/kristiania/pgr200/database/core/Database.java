@@ -4,7 +4,6 @@ import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -102,7 +101,6 @@ class Database extends DaoMethods {
         } catch (SQLException e) {
             System.out.println("failed to update Talk due to SQLException");
         }
-
     }
 
     /**
