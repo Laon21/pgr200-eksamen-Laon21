@@ -39,16 +39,18 @@ java -jar database-main/target/Client.jar show 1
 
 java -jar database-main/target/Client.jar stopserver     //Kommando for å stoppe serveren FRA Client.
 
-## WIP - Hvordan har vi jobbet sammen?
-(Beskrivelse av hvordan vi har jobbet sammen, tanker fra begge)
+## Notater til innleveringen
+Vi har valgt å bruke @SuppressWarning's i situasjoner hvor vi får advarsler, har undersøkt de, og det viser seg at advarselen ikke har noen signifikans.
+
+## Hvordan har vi jobbet sammen?
 Vi har hovedsaklig jobbet hver for oss, hvor vi har brukt Github for å dele kode og Slack for kommunikasjon. Dette har fungert bra, med et par små situasjoner hvor vi har jobbet på samme funksjonalitet, men i så liten grad at dette var aldri en hindring. 
+Alt i alt har det gått veldig fint, vi har jobbet godt sammen og har alltid klart å komme til enighet uten konflikt når vi har måtte ta beslutninger.
 
-## TODO - Tilbakemelding FRA en annen gruppe
+## Tilbakemelding
+Tilbakemeldingen til annen gruppe OG mottatt tilbakemelding kan du finne i egen fil.
 
-## TODO - Tilbakemelding TIL en annen gruppe
-
-## TODO - Egenevaluering
-(Etter å ha lest gjennom vurderingskravene, ser det ut til at en B skal være realistisk.)
+## Egenevaluering
+Etter å ha sjekket koden opp mot listen nedenfor (Retningslinjer for vurdering), så synes vi at vi har jobbet oss opp til og fortjent karakter B.
 
 ## TODO - Vedlegg (UML-diagram, link til screencast)
 
@@ -139,8 +141,8 @@ I tilbakemeldingen er det lurt å stille spørsmålene: 1. Hva lærte jeg av den
 
 - [ ] Kodekvalitet
   - [x] Koden er klonet fra GitHub classrom
-  - [ ] Produserer `mvn package` en executable jar? (tips: Bruk `maven-shade-plugin`)
-  - [ ] Bruker koden Java 8 og UTF-8
+  - [x] Produserer `mvn package` en executable jar? (tips: Bruk `maven-shade-plugin`)
+  - [x] Bruker koden Java 8 og UTF-8
   - [ ] Bygger prosjektet på [https://travis-ci.com](https://travis-ci.com)?
   - [ ] Har du god test-dekning? (tips: Sett opp jacoco-maven-plugin til å kreve at minst 65% av linjene har testdekning)
   - [ ] Er koden delt inn i flere Maven `<modules>`?

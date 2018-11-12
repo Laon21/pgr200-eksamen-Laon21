@@ -2,6 +2,7 @@ package no.kristiania.pgr200.database.core;
 
 import org.flywaydb.core.Flyway;
 import org.postgresql.ds.PGPoolingDataSource;
+
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,14 +37,14 @@ public class Server {
         db = new Database(createDataSource());
         new Thread(this::startServer).start();
     }
-    
+
     private synchronized void stopServer() {
-    	System.out.println("Closing connection...");
-    	this.doStop = true;
+        System.out.println("Closing connection...");
+        this.doStop = true;
     }
 
     @SuppressWarnings("unused")
-	public static void main(String[] args) {
+    public static void main(String[] args) {
         Server localServer = new Server(10080);
     }
 
@@ -68,8 +69,8 @@ public class Server {
                 } else if (isInteger(requestLine[1].split("/")[3])) {
                     showElementWithId(output, requestLine[1]);
                 } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("stopserver")) {
-                	output.write(("Shutting down server... \r\n").getBytes());
-                	stopServer();
+                    output.write(("Shutting down server... \r\n").getBytes());
+                    stopServer();
                 }
                 output.write(("Connection: closed \r\n").getBytes());
                 output.flush();
@@ -82,7 +83,8 @@ public class Server {
 
     /**
      * If its a post request this is run
-     * @param output OutputStream for the http response
+     *
+     * @param output      OutputStream for the http response
      * @param requestLine HTTP requestLine from the client
      * @throws IOException OutputStream
      */
@@ -100,7 +102,8 @@ public class Server {
 
     /**
      * Creates a new Talk object and inserts it into the database
-     * @param output OutputStream for the http response
+     *
+     * @param output     OutputStream for the http response
      * @param parameters Map containing keys (columns) and value for the new object
      * @throws IOException OutputStream
      */
@@ -110,12 +113,13 @@ public class Server {
         newTalk.setDescription(parameters.get("description"));
         newTalk.setTopic(parameters.get("topic"));
         db.insertTalk(newTalk);
-        output.write(("Inserted "+ newTalk.getTitle() + " with id" + newTalk.getId() + "\r\n").getBytes());
+        output.write(("Inserted " + newTalk.getTitle() + " with id" + newTalk.getId() + "\r\n").getBytes());
     }
 
     /**
      * Updates a element in the database with the provided ID
-     * @param output OutputStream for the http response
+     *
+     * @param output     OutputStream for the http response
      * @param parameters Map containing the new values for columns in the database. Key is column name
      * @throws IOException OutputStream
      */
@@ -126,6 +130,7 @@ public class Server {
 
     /**
      * Gets all elements in the database and returns them to the client
+     *
      * @param output OutputStream for the http response
      * @throws IOException OutputStream
      */
@@ -140,6 +145,7 @@ public class Server {
 
     /**
      * Tries to find the element with provided ID in the database
+     *
      * @param output  OutputStream for the HTTP response
      * @param request HTTP request
      * @throws IOException OutputStream
@@ -156,7 +162,7 @@ public class Server {
     /**
      * This makes the database drop all information and start anew
      * Server will shut down to apply updates. #TODO separate DB and server to avoid this in the future
-     * @param output OutputStream for the HTTP response
+     * @param output OutputStream for the http response
      */
     private void resetDb(OutputStream output) throws IOException {
         db.resetDb();
@@ -202,8 +208,8 @@ public class Server {
         return currentLine.toString();
     }
 
-	public DataSource createDataSource() {
-		PGPoolingDataSource dataSource = new PGPoolingDataSource();
+    public DataSource createDataSource() {
+        PGPoolingDataSource dataSource = new PGPoolingDataSource();
         readPropertiesFile();
         dataSource.setUrl(dataSourceUrl);
         dataSource.setUser(dataSourceUsername);
