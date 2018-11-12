@@ -10,10 +10,9 @@ public class Client {
 
     private static LinkedHashMap<String, String> arguments;
     private static final String stringNotUsed = "STRING_NOT_USED";
-    static StringBuilder httpString;
-    private static String target = "localhost";
-    static String method;
-    static String requestString;
+    private static StringBuilder httpString;
+    private static String method;
+    private static String requestString;
 
     /**
      * Runs when program is started, takes args from the user and executes a request to the server.
@@ -27,6 +26,7 @@ public class Client {
                 System.exit(1);
             }
             requestStringBuilder(args);
+            String target = "localhost";
             sendRequest(target, 10080, method, requestString).printResponse();
         } catch (NullPointerException e) {
             System.out.println("Check if server is online before trying again");
@@ -43,6 +43,7 @@ public class Client {
         System.out.println("show {id}");
         System.out.println("update {id} -{column} {value}");
         System.out.println("resetDb");
+        System.out.println("stopserver");
     }
 
     /**
@@ -66,10 +67,9 @@ public class Client {
      * Title "1" topic "2 1" -> Title=1&Topic=2+1
      * @param args arguments provided by the user
      */
-    private static void requestStringBuilder(String[] args) {
+    static void requestStringBuilder(String[] args) {
         httpString = new StringBuilder();
-        parseArgs(args);
-        arguments.keySet()
+        parseArgs(args).keySet()
                 .forEach(key ->
                         httpString
                                 .append(key)
@@ -91,7 +91,7 @@ public class Client {
      * @param args provided by the user
      * @return LinkedHashMap with the argument values
      */
-    public static LinkedHashMap<String, String> parseArgs(String[] args) {
+    static LinkedHashMap<String, String> parseArgs(String[] args) {
         arguments = new LinkedHashMap<>();
         httpString.append(args[0]).append(" ");
         if (args[0].equalsIgnoreCase("add") || args[0].equalsIgnoreCase("update")) {
@@ -119,11 +119,11 @@ public class Client {
         return arguments;
     }
 
-    public static LinkedHashMap<String, String> getArgumentsMap() {
+    static LinkedHashMap<String, String> getArgumentsMap() {
         return arguments;
     }
 
-    public static String getRequestString() {
+    static String getRequestString() {
         return requestString;
     }
 }
