@@ -46,6 +46,7 @@ Vi har hovedsaklig jobbet hver for oss, hvor vi har brukt Github for å dele kod
 ## TODO - Tilbakemelding TIL en annen gruppe
 
 ## TODO - Egenevaluering
+(Etter å ha lest gjennom vurderingskravene, ser det ut til at en B skal være realistisk.)
 
 ## TODO - Vedlegg (UML-diagram, link til screencast)
 
