@@ -113,17 +113,18 @@ class Database extends DaoMethods {
      */
     private String checkUpdateArgs(Map<String, String> arguments) {
         StringBuilder sql = new StringBuilder("update talks set ");
-        String id = arguments.get("id");
-        arguments.remove("id");
         try {
             arguments.keySet()
-                    .forEach(key ->
-                            sql.append(key).append("='").append(arguments.get(key)).append("'")
-                                    .append(",")
-                    );
+                    .forEach(key -> {
+                        if (key.equalsIgnoreCase("id")) {
+
+                        } else {
+                            sql.append(key).append("='").append(arguments.get(key)).append("'").append(",");
+                        }
+                    });
         } finally {
             sql.deleteCharAt(sql.lastIndexOf(","));
-            sql.append(" where talk_id=").append(id);
+            sql.append(" where talk_id=").append(arguments.get("id"));
         }
         return sql.toString();
     }
