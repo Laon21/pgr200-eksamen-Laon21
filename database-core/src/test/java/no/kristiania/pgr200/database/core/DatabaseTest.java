@@ -51,7 +51,6 @@ public class DatabaseTest {
         assertThat(db.getTalk(testTalk.getId()).getTitle()).isEqualToIgnoringCase("5");
     }
 
-
     private Talk sampleTalk() {
         Talk talk = new Talk();
         talk.setTitle("1");

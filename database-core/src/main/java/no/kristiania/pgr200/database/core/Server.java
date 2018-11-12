@@ -18,8 +18,9 @@ public class Server {
     private ServerSocket serverSocket;
     private int port;
     private String dataSourceUrl, dataSourcePassword, dataSourceUsername;
-    private Database db;
+    private static Database db;
     private Boolean doStop = false;
+    protected OutputStream output;
 
 
     public Server(int port) {
@@ -55,7 +56,7 @@ public class Server {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Connection established");
                 InputStream input = clientSocket.getInputStream();
-                OutputStream output = clientSocket.getOutputStream();
+                output = clientSocket.getOutputStream();
                 String[] requestLine = readNextLine(input).split(" ");
 
                 if (requestLine[0].equalsIgnoreCase("POST")) {
@@ -118,7 +119,7 @@ public class Server {
      * @param parameters Map containing the new values for columns in the database. Key is column name
      * @throws IOException OutputStream
      */
-    private void updateTalkWithId(OutputStream output, Map<String, String> parameters) throws IOException {
+    public void updateTalkWithId(OutputStream output, Map<String, String> parameters) throws IOException {
         db.updateTalk(parameters);
         output.write(("Updated element with id" + parameters.get("id") + "\r\n").getBytes());
     }
@@ -228,5 +229,9 @@ public class Server {
         dataSourcePassword = props.getProperty("db.password");
 
     }
+
+	public static void setDb(Database tempDb) {
+		Server.db = tempDb;
+	}
 
 }
