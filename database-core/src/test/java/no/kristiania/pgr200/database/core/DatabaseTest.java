@@ -1,16 +1,14 @@
 package no.kristiania.pgr200.database.core;
 
 
-import org.flywaydb.core.Flyway;
-import org.h2.jdbcx.JdbcDataSource;
 import org.junit.Test;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-
 import java.util.HashMap;
 import java.util.Map;
 
+import static no.kristiania.pgr200.database.core.ServerTest.getDataSource;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DatabaseTest {
@@ -37,15 +35,15 @@ public class DatabaseTest {
         assertThat((db.listAll())).isNotEmpty();
     }
 
-    @Test 
-    public void updateTalk(){
+    @Test
+    public void updateTalk() {
         DataSource dataSource = createDataSource();
         Database db = new Database(dataSource);
         Talk testTalk = sampleTalk();
         Map<String, String> fakeArgs = new HashMap<>();
 
         db.insertTalk(testTalk);
-        fakeArgs.put("id",String.valueOf(testTalk.getId()));
+        fakeArgs.put("id", String.valueOf(testTalk.getId()));
         fakeArgs.put("title", "5");
         db.updateTalk(fakeArgs);
         assertThat(db.getTalk(testTalk.getId()).getTitle()).isEqualToIgnoringCase("5");
@@ -60,11 +58,7 @@ public class DatabaseTest {
     }
 
     private DataSource createDataSource() {
-        JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");
-        dataSource.setUser("sa");
-        Flyway.configure().dataSource(dataSource).load().migrate();
-        return dataSource;
+        return getDataSource();
 
     }
 
