@@ -46,8 +46,8 @@ public class DatabaseTest {
         Map<String, String> fakeArgs = new HashMap<>();
 
         db.insertTalk(testTalk);
-        fakeArgs.put("title", "5");
         fakeArgs.put("id",String.valueOf(testTalk.getId()));
+        fakeArgs.put("title", "5");
         db.updateTalk(fakeArgs);
         assertThat(db.getTalk(testTalk.getId()).getTitle()).isEqualToIgnoringCase("5");
     }
