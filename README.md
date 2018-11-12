@@ -5,24 +5,13 @@ Espen Høines (laon21) & William Nordli (norwil17)
 ## Forberedelser
 1. Last ned eller klon prosjektet
 2. Pass på at både Java og Maven er riktig installert
-
-----Maven-----
-
-3. kjør "mvn package" i prosjektmappen
-4. Naviger til database-main/target/ og åpne Server.jar som et arkiv (7zip, winrar)
-5. Endre verdiene i innlevering.properties til å stemme med din database
-
-----IDE----
-
 3. naviger til database-core\src\main\resources
 4. Endre verdiene i innlevering.properties til å stemme med din database
-5. kjør "mvn package" i prosjektmappen
 
 
 ## For å kjøre programmet:
-1. Naviger til prosjektmappen
-2. Start Server.jar i commandline med java -jar database-main/target/Server.jar
-
+1. kjør "mvn package" i prosjektmappen
+2. Start Server.jar i command line med java -jar database-main/target/Server.jar
 3. Kjør Client.jar i et nytt vindu med argumenter f.eks:
 
 java -jar database-main/target/Client.jar resetdb
