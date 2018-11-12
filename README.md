@@ -39,6 +39,9 @@ java -jar database-main/target/Client.jar show 1
 
 java -jar database-main/target/Client.jar stopserver     //Kommando for å stoppe serveren FRA Client.
 
+## Notater til innleveringen
+Vi har valgt å bruke @SuppressWarning's i situasjoner hvor vi får advarsler, har undersøkt de, og det viser seg at advarselen ikke har noen signifikans.
+
 ## WIP - Hvordan har vi jobbet sammen?
 (Beskrivelse av hvordan vi har jobbet sammen, tanker fra begge)
 Vi har hovedsaklig jobbet hver for oss, hvor vi har brukt Github for å dele kode og Slack for kommunikasjon. Dette har fungert bra, med et par små situasjoner hvor vi har jobbet på samme funksjonalitet, men i så liten grad at dette var aldri en hindring. 
@@ -47,8 +50,8 @@ Vi har hovedsaklig jobbet hver for oss, hvor vi har brukt Github for å dele kod
 
 ## TODO - Tilbakemelding TIL en annen gruppe
 
-## TODO - Egenevaluering
-(Etter å ha lest gjennom vurderingskravene, ser det ut til at en B skal være realistisk.)
+## Egenevaluering
+Etter å ha sjekket koden opp mot listen nedenfor (Retningslinjer for vurdering), så synes vi at vi har jobbet oss opp til og fortjent karakter B.
 
 ## TODO - Vedlegg (UML-diagram, link til screencast)
 
