@@ -2,7 +2,7 @@
 PGR200 Eksamen
 Espen Høines (laon21) & William Nordli (norwil17)
 
-## Forbredelser
+## Forberedelser
 1. Last ned eller klon prosjektet
 2. Pass på at både Java og Maven er riktig installert
 
@@ -36,6 +36,18 @@ java -jar database-main/target/Client.jar list
 java -jar database-main/target/Client.jar update 1 -title "Ny tittel" -topic "Noe nytt"
 
 java -jar database-main/target/Client.jar show 1
+
+## WIP - Hvordan har vi jobbet sammen?
+(Beskrivelse av hvordan vi har jobbet sammen, tanker fra begge)
+Vi har hovedsaklig jobbet hver for oss, hvor vi har brukt Github for å dele kode og Slack for kommunikasjon. Dette har fungert bra, med et par små situasjoner hvor vi har jobbet på samme funksjonalitet, men i så liten grad at dette var aldri en hindring. 
+
+## TODO - Tilbakemelding FRA en annen gruppe
+
+## TODO - Tilbakemelding TIL en annen gruppe
+
+## TODO - Egenevaluering
+
+## TODO - Vedlegg (UML-diagram, link til screencast)
 
 # PGR200 Hovedinnlevering
 
@@ -132,15 +144,15 @@ I tilbakemeldingen er det lurt å stille spørsmålene: 1. Hva lærte jeg av den
   - [ ] Bruker kommunikasjon mellom klient og server HTTP korrekt?
   - [ ] Kobler serveren seg opp mot PostgreSQL ved hjelp av konfigurasjon i fila `innlevering.properties` i *current working directory* med `dataSource.url`, `dataSource.username`, `dataSource.password`?
 - [ ] Funksjonalitet
-  - [ ] add: Legg til et foredrag i databasen med title, description og topic (valgfritt)
-  - [ ] list: List opp alle foredrag i basen med et valgfritt topic
-  - [ ] show: Vis detaljer for et foredrag
+  - [x] add: Legg til et foredrag i databasen med title, description og topic (valgfritt)
+  - [x] list: List opp alle foredrag i basen med et valgfritt topic
+  - [x] show: Vis detaljer for et foredrag
   - [ ] update: Endre title, description eller topic for et foredrag
   - [ ] Valgfri tillegg: Kommandoer for å sette opp hvor mange dager og timer konferansen skal vare og hvor mange parallelle spor den skal inneholde.
-- [ ] Dokumentasjon i form av README.md
-  - [ ] Navn og Feide-ID på dere de som var på teamet
-  - [ ] Inkluderer dokumentasjonen hvordan man tester ut funksjonaliteten programmet manuelt? (Inkludert eventuell ekstra funksjonalitet dere har tatt med)
-  - [ ] Inkluderer dokumentasjonen en evaluering av hvordan man jobbet sammen?
+- [x] Dokumentasjon i form av README.md
+  - [x] Navn og Feide-ID på dere de som var på teamet
+  - [x] Inkluderer dokumentasjonen hvordan man tester ut funksjonaliteten programmet manuelt? (Inkludert eventuell ekstra funksjonalitet dere har tatt med)
+  - [x] Inkluderer dokumentasjonen en evaluering av hvordan man jobbet sammen?
   - [ ] Inkluderer dokumentasjonen en screencast av en parprogrammeringsesjon?
   - [ ] Inkluderer dokumentasjonen en evaluering *fra* en annen gruppe og en evaluering *til* en annen gruppe?
   - [ ] Inkluderer dokumentasjonen en UML diagram med datamodellen?
