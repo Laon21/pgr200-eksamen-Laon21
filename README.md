@@ -43,12 +43,11 @@ java -jar database-main/target/Client.jar stopserver     //Kommando for å stopp
 Vi har valgt å bruke @SuppressWarning's i situasjoner hvor vi får advarsler, har undersøkt de, og det viser seg at advarselen ikke har noen signifikans.
 
 ## WIP - Hvordan har vi jobbet sammen?
-(Beskrivelse av hvordan vi har jobbet sammen, tanker fra begge)
 Vi har hovedsaklig jobbet hver for oss, hvor vi har brukt Github for å dele kode og Slack for kommunikasjon. Dette har fungert bra, med et par små situasjoner hvor vi har jobbet på samme funksjonalitet, men i så liten grad at dette var aldri en hindring. 
+Alt i alt har det gått veldig fint, vi har jobbet godt sammen og har alltid klart å komme til enighet uten konflikt når vi har måtte ta beslutninger.
 
-## TODO - Tilbakemelding FRA en annen gruppe
-
-## TODO - Tilbakemelding TIL en annen gruppe
+## Tilbakemelding
+Tilbakemeldingen til annen gruppe OG mottatt tilbakemelding kan du finne i egen fil.
 
 ## Egenevaluering
 Etter å ha sjekket koden opp mot listen nedenfor (Retningslinjer for vurdering), så synes vi at vi har jobbet oss opp til og fortjent karakter B.
