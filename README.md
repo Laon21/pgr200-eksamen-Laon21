@@ -42,7 +42,7 @@ java -jar database-main/target/Client.jar stopserver     //Kommando for å stopp
 ## Notater til innleveringen
 Vi har valgt å bruke @SuppressWarning's i situasjoner hvor vi får advarsler, har undersøkt de, og det viser seg at advarselen ikke har noen signifikans.
 
-## WIP - Hvordan har vi jobbet sammen?
+## Hvordan har vi jobbet sammen?
 Vi har hovedsaklig jobbet hver for oss, hvor vi har brukt Github for å dele kode og Slack for kommunikasjon. Dette har fungert bra, med et par små situasjoner hvor vi har jobbet på samme funksjonalitet, men i så liten grad at dette var aldri en hindring. 
 Alt i alt har det gått veldig fint, vi har jobbet godt sammen og har alltid klart å komme til enighet uten konflikt når vi har måtte ta beslutninger.
 
