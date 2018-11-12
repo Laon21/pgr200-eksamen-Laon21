@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+@SuppressWarnings("deprecation")
 public class Server {
 
     private ServerSocket serverSocket;
@@ -40,7 +41,8 @@ public class Server {
     	this.doStop = true;
     }
 
-    public static void main(String[] args) {
+    @SuppressWarnings("unused")
+	public static void main(String[] args) {
         Server localServer = new Server(10080);
     }
 
@@ -137,7 +139,7 @@ public class Server {
 
     /**
      * Tries to find the element with provided ID in the database
-     * @param output  OutputStream for the http response
+     * @param output  OutputStream for the HTTP response
      * @param request HTTP request
      * @throws IOException OutputStream
      */
@@ -153,7 +155,7 @@ public class Server {
     /**
      * This makes the database drop all information and start anew
      * Server will shut down to apply updates. #TODO separate DB and server to avoid this in the future
-     * @param output OutputStream for the http response
+     * @param output OutputStream for the HTTP response
      */
     private void resetDb(OutputStream output) throws IOException {
         db.resetDb();
@@ -164,7 +166,7 @@ public class Server {
     /**
      * Checks if the string is an Integer
      *
-     * @param input Http requestString
+     * @param input HTTP requestString
      * @return true if Integer, else false
      */
     private boolean isInteger(String input) {
@@ -199,8 +201,8 @@ public class Server {
         return currentLine.toString();
     }
 
-    public DataSource createDataSource() {
-        PGPoolingDataSource dataSource = new PGPoolingDataSource();
+	public DataSource createDataSource() {
+		PGPoolingDataSource dataSource = new PGPoolingDataSource();
         readPropertiesFile();
         dataSource.setUrl(dataSourceUrl);
         dataSource.setUser(dataSourceUsername);

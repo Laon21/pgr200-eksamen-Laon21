@@ -9,11 +9,11 @@ import java.util.LinkedHashMap;
 public class Client {
 
     private static LinkedHashMap<String, String> arguments;
+    private static final String stringNotUsed = "STRING_NOT_USED";
     static StringBuilder httpString;
     private static String target = "localhost";
     static String method;
     static String requestString;
-
 
     /**
      * Runs when program is started, takes args from the user and executes a request to the server.
@@ -83,13 +83,12 @@ public class Client {
         httpString = new StringBuilder(requestString);
         httpString.delete(0, httpString.indexOf("+") + 1);
         requestString = httpString.toString();
-
     }
 
     /**
      * Used in RequestStringBuilder
      * Parses the arguments from the user and adds it to a LinkedHashMap that is used to  build the request string
-      * @param args provided by the user
+     * @param args provided by the user
      * @return LinkedHashMap with the argument values
      */
     public static LinkedHashMap<String, String> parseArgs(String[] args) {
@@ -113,9 +112,9 @@ public class Client {
         } else if (args[0].equalsIgnoreCase("list")) {
             arguments.put("id", "all");
         } else if (args[0].equalsIgnoreCase("resetDb")) {
-            arguments.put("ground", "zero");
+            arguments.put(stringNotUsed, stringNotUsed);
         } else if (args[0].equalsIgnoreCase("stopserver")) {
-        	arguments.put("stop", "server");
+        	arguments.put(stringNotUsed, stringNotUsed);
         }
         return arguments;
     }
