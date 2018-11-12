@@ -1,0 +1,16 @@
+TILBAKE MELDING
+
+> mvn package
+> Oppdater innlevering.properties med database settings i server\src\main\resources\properties
+
+burde bytte plass i readme, men ellers virker det slik et skal.
+
+Maven compiler plugin mangler versjon i POM og gir advarsel når du kjører package.
+Mye throwing av exceptions, men de blir aldri fanget opp. 
+Main client sin run metode er veggen Donald Trump skulle ønske at han kunne bygget.
+
+Bruk av gson virker bra? har desverre liten erfaring med det, men det gjør koden lett å lese og eg kan anta hva den gjør utifra resultatet.
+Det er mye mer luft mellom koden i HTTPServer som gjør det mye hyggeligere å lese gjennom i sterk kontrast til MainClient.
+Veldig mye kode repetisjon f.eks DAO metoder.
+
+Mye tester og alle kjører grønt og fant ikke noen som ikke gjør noe brukbart.
