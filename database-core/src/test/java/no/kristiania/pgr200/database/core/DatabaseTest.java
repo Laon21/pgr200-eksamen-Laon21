@@ -25,8 +25,6 @@ public class DatabaseTest {
         db.insertTalk(testTalk);
         System.out.println(testTalk);
         assertThat(db.getTalk(testTalk.getId())).isEqualToComparingFieldByField(testTalk);
-
-
     }
 
     @Test
@@ -39,7 +37,8 @@ public class DatabaseTest {
         assertThat((db.listAll())).isNotEmpty();
     }
 
-    @Test public void updateTalk(){
+    @Test 
+    public void updateTalk(){
         DataSource dataSource = createDataSource();
         Database db = new Database(dataSource);
         Talk testTalk = sampleTalk();
