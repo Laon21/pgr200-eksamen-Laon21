@@ -53,6 +53,9 @@ Tilbakemeldingen til annen gruppe OG mottatt tilbakemelding kan du finne i egen 
 Etter å ha sjekket koden opp mot listen nedenfor (Retningslinjer for vurdering), så synes vi at vi har jobbet oss opp til og fortjent karakter B.
 
 ## TODO - Vedlegg (UML-diagram, link til screencast)
+![UML](doc/Class_Diagram.png)
+![Datamodel](doc/datamodel.png)
+https://www.youtube.com/watch?v=0XGvgkphWhI
 
 # PGR200 Hovedinnlevering
 
