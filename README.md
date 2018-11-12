@@ -37,6 +37,8 @@ java -jar database-main/target/Client.jar update 1 -title "Ny tittel" -topic "No
 
 java -jar database-main/target/Client.jar show 1
 
+java -jar database-main/target/Client.jar stopserver     //Kommando for å stoppe serveren FRA Client.
+
 ## WIP - Hvordan har vi jobbet sammen?
 (Beskrivelse av hvordan vi har jobbet sammen, tanker fra begge)
 Vi har hovedsaklig jobbet hver for oss, hvor vi har brukt Github for å dele kode og Slack for kommunikasjon. Dette har fungert bra, med et par små situasjoner hvor vi har jobbet på samme funksjonalitet, men i så liten grad at dette var aldri en hindring. 
