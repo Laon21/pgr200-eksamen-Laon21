@@ -11,23 +11,19 @@ Espen Høines (laon21) & William Nordli (norwil17)
 
 ## For å kjøre programmet:
 1. kjør "mvn package" i prosjektmappen
-2. Start Server.jar i command line med java -jar database-main/target/Server.jar
-3. Kjør Client.jar i et nytt vindu med argumenter f.eks:
+2. Start Server.jar i CLI
+3. Kjør Client.jar i et nytt CLI vindu med argumenter f.eks:
+```
+> java -jar database-main/target/Server.jar
 
-java -jar database-main/target/Client.jar resetdb
-
-java -jar database-main/target/Client.jar add -title "Eksempel tittel" -de(scription) "En test av programmet" -to(pic) "How2guide"
-
-java -jar database-main/target/Client.jar add -ti "Selvskading uten arr" -de "NRK satirisk med ville ideer" -to "Komedie"
-
-java -jar database-main/target/Client.jar list
-
-java -jar database-main/target/Client.jar update 1 -title "Ny tittel" -topic "Noe nytt"
-
-java -jar database-main/target/Client.jar show 1
-
-java -jar database-main/target/Client.jar stopserver     //Kommando for å stoppe serveren FRA Client.
-
+> java -jar database-main/target/Client.jar resetdb
+> java -jar database-main/target/Client.jar add -title "Eksempel tittel" -de(scription) "En test av programmet" -to(pic) "How2guide"
+> java -jar database-main/target/Client.jar add -ti "Selvskading uten arr" -de "NRK satirisk med ville ideer" -to "Komedie"
+> java -jar database-main/target/Client.jar list
+> java -jar database-main/target/Client.jar update 1 -title "Ny tittel" -topic "Noe nytt"
+> java -jar database-main/target/Client.jar show 1
+> java -jar database-main/target/Client.jar stopserver     //Kommando for å stoppe serveren FRA Client.
+``` 
 ## Notater til innleveringen
 Vi har valgt å bruke @SuppressWarning's i situasjoner hvor vi får advarsler, har undersøkt de, og det viser seg at advarselen ikke har noen signifikans.
 
@@ -39,7 +35,7 @@ Alt i alt har det gått veldig fint, vi har jobbet godt sammen og har alltid kla
 Tilbakemeldingen til annen gruppe OG mottatt tilbakemelding kan du finne i egen fil.
 
 ## Egenevaluering
-Etter å ha sjekket koden opp mot listen nedenfor (Retningslinjer for vurdering), så synes vi at vi har jobbet oss opp til og fortjent karakter B.
+Dette prosjektet kunne gått mye bedre hvor mye tid som kunne blitt brukt til å forbedre oppgaven ble kastet bort. Avansert funksjonalitet som ente opp med å ikkke være godt nok hvor prioriteten burde ha vært på å først gjøre de simpelt og så bygge oppover. Det føltes litt ut som å møte på en murvegg for å så ikke klare å klatre over og ende opp med å gå rundt. Det er også skuffende med å ikke få Travis til å kjøre med serveren hvor det gikk fra en til annen ny feil på slutten. 
 
 ## Vedlegg (UML-diagram, link til screencast)
 
