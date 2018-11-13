@@ -21,7 +21,6 @@ public class ServerTest {
         HttpResponse response = request.execute();
         response.printResponse();
         assertThat((response.responseBody)).isNotEmpty();
-        server.stopServer();
     }
 
     @Test
@@ -56,9 +55,9 @@ public class ServerTest {
         Server server = new Server(0);
         Database tempDb = new Database(createTempDataSource());
         Server.setDb(tempDb);
-        HttpRequest addRequest = new HttpRequest("localhost", server.getPort(), "stopserver", "STRING_NOT_USED");
-        HttpResponse addResponse = addRequest.execute();
-        addResponse.printResponse();
+        HttpRequest stopRequest = new HttpRequest("localhost", server.getPort(), "stopserver", "STRING_NOT_USED");
+        HttpResponse stopResponse = stopRequest.execute();
+        stopResponse.printResponse();
         assertTrue(server.doStop);
     }
 

@@ -65,10 +65,9 @@ public class Server {
                 } else if (isInteger(requestLine[1].split("/")[3])) {
                     showElementWithId(requestLine[1]);
                 } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("stopserver")) {
-                    output.write(("Shutting down server... \r\n").getBytes());
                     stopServer();
                 }
-                output.write(("Connection: closed \r\n").getBytes());
+                outputWriter("Connection: closed \r\n");
                 output.flush();
                 clientSocket.close();
             } catch (IOException e) {
@@ -79,7 +78,7 @@ public class Server {
 
     protected synchronized void stopServer() {
         System.out.println("Closing connection...");
-        outputWriter("Server shutting down");
+        outputWriter("Server shutting down \r\n");
         this.doStop = true;
     }
 
