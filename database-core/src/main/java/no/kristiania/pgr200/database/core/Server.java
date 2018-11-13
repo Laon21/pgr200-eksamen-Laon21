@@ -65,6 +65,9 @@ public class Server {
                 } else if (isInteger(requestLine[1].split("/")[3])) {
                     showElementWithId(requestLine[1]);
                 } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("stopserver")) {
+                    System.out.println("Closing connection...");
+                    outputWriter("Server shutting down \r\n");
+                    output.flush();
                     stopServer();
                 }
                 outputWriter("Connection: closed \r\n");
@@ -77,8 +80,6 @@ public class Server {
     }
 
     protected synchronized void stopServer() {
-        System.out.println("Closing connection...");
-        outputWriter("Server shutting down \r\n");
         this.doStop = true;
     }
 
