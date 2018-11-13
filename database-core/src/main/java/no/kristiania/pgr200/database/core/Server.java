@@ -228,9 +228,9 @@ public class Server {
         } catch (IOException e) {
             System.out.println("file not found");
         }
-        dataSourceUrl = props.getProperty("db.conn.url");
-        dataSourceUsername = props.getProperty("db.username");
-        dataSourcePassword = props.getProperty("db.password");
+        dataSourceUrl = props.getProperty("dataSource.url");
+        dataSourceUsername = props.getProperty("dataSource.username");
+        dataSourcePassword = props.getProperty("dataSource.password");
 
     }
 

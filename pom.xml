@@ -55,7 +55,7 @@
 
                         <id>Server</id>
                         <configuration>
-                        <finalName>Server</finalName>
+                            <finalName>Server</finalName>
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
