@@ -49,6 +49,16 @@ public class DatabaseTest {
         assertThat(db.getTalk(testTalk.getId()).getTitle()).isEqualToIgnoringCase("5");
     }
 
+    @Test
+    public void resetDb() {
+        DataSource dataSource = createDataSource();
+        Database db = new Database(dataSource);
+        Talk testTalk = sampleTalk();
+        db.insertTalk(testTalk);
+        db.resetDb();
+        assertThat(db.listAll()).isEmpty();
+    }
+
     private Talk sampleTalk() {
         Talk talk = new Talk();
         talk.setTitle("1");

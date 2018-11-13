@@ -57,13 +57,13 @@ public class Server {
                 String[] requestLine = readNextLine(input).split(" ");
 
                 if (requestLine[0].equalsIgnoreCase("POST")) {
-                    postRequest(output, requestLine);
+                    postRequest(requestLine);
                 } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("list")) {
-                    listAllTalks(output);
+                    listAllTalks();
                 } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("resetDb")) {
-                    resetDb(output);
+                    resetDb();
                 } else if (isInteger(requestLine[1].split("/")[3])) {
-                    showElementWithId(output, requestLine[1]);
+                    showElementWithId(requestLine[1]);
                 } else if ((requestLine[1].split("/")[3]).equalsIgnoreCase("stopserver")) {
                     output.write(("Shutting down server... \r\n").getBytes());
                     stopServer();
@@ -76,98 +76,87 @@ public class Server {
             }
         }
     }
-    
+
     protected synchronized void stopServer() {
         System.out.println("Closing connection...");
+        outputWriter("Server shutting down");
         this.doStop = true;
     }
 
     /**
      * If its a post request this is run
      *
-     * @param output      OutputStream for the http response
      * @param requestLine HTTP requestLine from the client
-     * @throws IOException OutputStream
      */
-    private void postRequest(OutputStream output, String[] requestLine) throws IOException {
+    private void postRequest(String[] requestLine) {
         Map<String, String> parameters = new HashMap<>();
         for (String param : requestLine[2].split("&")) {
             parameters.put(param.split("=")[0].toLowerCase(), param.split("=")[1].replaceAll("\\+", " ").toLowerCase());
         }
         if (requestLine[1].toLowerCase().contains("update")) {
-            updateTalkWithId(output, parameters);
+            updateTalkWithId(parameters);
         } else {
-            insertNewTalk(output, parameters);
+            insertNewTalk(parameters);
         }
     }
 
     /**
      * Creates a new Talk object and inserts it into the database
      *
-     * @param output     OutputStream for the http response
      * @param parameters Map containing keys (columns) and value for the new object
-     * @throws IOException OutputStream
      */
-    private void insertNewTalk(OutputStream output, Map<String, String> parameters) throws IOException {
+    private void insertNewTalk(Map<String, String> parameters) {
         Talk newTalk = new Talk();
         newTalk.setTitle(parameters.get("title"));
         newTalk.setDescription(parameters.get("description"));
         newTalk.setTopic(parameters.get("topic"));
         db.insertTalk(newTalk);
-        output.write(("Inserted " + newTalk.getTitle() + " with id" + newTalk.getId() + "\r\n").getBytes());
+        outputWriter("Inserted " + newTalk.getTitle() + " with id" + newTalk.getId() + "\r\n");
     }
 
     /**
      * Updates a element in the database with the provided ID
      *
-     * @param output     OutputStream for the http response
      * @param parameters Map containing the new values for columns in the database. Key is column name
-     * @throws IOException OutputStream
      */
-    public void updateTalkWithId(OutputStream output, Map<String, String> parameters) throws IOException {
+    public void updateTalkWithId(Map<String, String> parameters) {
         db.updateTalk(parameters);
-        output.write(("Updated element with id" + parameters.get("id") + "\r\n").getBytes());
+        outputWriter("Updated id " + parameters.get("id") + "\r\n");
+
     }
 
     /**
      * Gets all elements in the database and returns them to the client
-     *
-     * @param output OutputStream for the http response
-     * @throws IOException OutputStream
      */
-    private void listAllTalks(OutputStream output) throws IOException {
+    private void listAllTalks() {
         for (Talk talk : db.listAll()) {
-            output.write(((talk).toString() + "\r\n").getBytes());
+            outputWriter((talk).toString() + "\r\n");
         }
         if (db.listAll().isEmpty()) {
-            output.write(("There was nothing to print.").getBytes());
+            outputWriter("There was nothing to print.");
         }
     }
 
     /**
      * Tries to find the element with provided ID in the database
      *
-     * @param output  OutputStream for the HTTP response
      * @param request HTTP request
-     * @throws IOException OutputStream
      */
-    private void showElementWithId(OutputStream output, String request) throws IOException {
+    private void showElementWithId(String request) {
         try {
-            output.write(db.getTalk(Integer.parseInt(request.split("/")[3])).toString().getBytes());
-            output.write(("\r\n").getBytes());
+            outputWriter(db.getTalk(Integer.parseInt(request.split("/")[3])).toString());
+            outputWriter("\r\n");
         } catch (NullPointerException e) {
             System.out.println("No element with that id found.");
         }
     }
 
     /**
-     * This makes the database drop all information and start anew
-     * Server will shut down to apply updates. #TODO separate DB and server to avoid this in the future
-     * @param output OutputStream for the http response
+     * This makes the database drop all information and start again
      */
-    private void resetDb(OutputStream output) throws IOException {
+    private void resetDb() {
         db.resetDb();
-        output.write(("All eleMENts, eleWOMENts and eleCHILDRENts was deleted. I hope you're happy. \r\n").getBytes());
+        outputWriter("All eleMENts, eleWOMENts and eleCHILDRENts was deleted. I hope you're happy. \r\n");
         db = new Database(createDataSource());
     }
 
@@ -183,6 +172,14 @@ public class Server {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public void outputWriter(String outputString) {
+        try {
+            output.write((outputString).getBytes());
+        } catch (IOException e) {
+            System.out.println("failed to write output");
         }
     }
 
@@ -237,8 +234,8 @@ public class Server {
 
     }
 
-	public static void setDb(Database tempDb) {
-		Server.db = tempDb;
-	}
+    public static void setDb(Database tempDb) {
+        Server.db = tempDb;
+    }
 
 }

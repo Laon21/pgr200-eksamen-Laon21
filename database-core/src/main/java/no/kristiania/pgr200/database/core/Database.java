@@ -4,10 +4,11 @@ import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-class Database extends DaoMethods {
+class Database extends DataAccessObjectMethods {
 
     Database(DataSource dataSource) {
         super(dataSource);
@@ -68,8 +69,9 @@ class Database extends DaoMethods {
         try {
             return list("SELECT * FROM TALKS", result -> mapToTalk(result));
         } catch (SQLException e) {
-            System.out.println("failed to list talk due to SQLException");
-            return null;
+            System.out.println("There was nothing to list");
+            List<Talk> list = new ArrayList<>();
+            return list;
         }
     }
 
@@ -134,13 +136,9 @@ class Database extends DaoMethods {
      */
     void resetDb() {
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "drop table conference, talks, days, flyway_schema_history, time_slots, tracks";
-            try (PreparedStatement statement = conn.prepareStatement(sql)) {
-                statement.executeUpdate();
-                Flyway.configure().dataSource(dataSource).load().baseline();
-            }
-        } catch (SQLException e) {
-            System.out.println("failed to drop tables in the database");
+                Flyway.configure().dataSource(dataSource).load().clean();
+            } catch (SQLException e) {
+            System.out.println("failed to clean up database");
         }
     }
 }

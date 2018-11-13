@@ -9,11 +9,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DaoMethods {
+public abstract class DataAccessObjectMethods {
 
     public final DataSource dataSource;
 
-    public DaoMethods(DataSource dataSource) {
+    public DataAccessObjectMethods(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -37,7 +37,6 @@ public abstract class DaoMethods {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 statement.executeUpdate();
-
             }
         }
     }
